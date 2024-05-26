@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../Components/firebase/firebase"; 
+import { auth } from "../../Components/firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "firebase/auth"; 
+import { updateProfile } from "firebase/auth";
 import { getDatabase, ref, onValue, update } from "firebase/database";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 function Update() {
   const [email, setEmail] = useState("");
@@ -21,10 +21,10 @@ function Update() {
   useEffect(() => {
     if (user) {
       setUserId(user.uid);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
-      setPhone('');
-      setAddress('');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
+      setPhone("");
+      setAddress("");
     }
   }, [user]);
 
@@ -53,15 +53,15 @@ function Update() {
     const updates = {};
     if (email) {
       updates.email = email;
-      localStorage.setItem('email', email);
+      localStorage.setItem("email", email);
     }
     if (username) {
       updates.username = username;
-      localStorage.setItem('username', username);
+      localStorage.setItem("username", username);
     }
     if (accountBalance) {
       updates.accountBalance = accountBalance;
-      localStorage.setItem('accountBalance', accountBalance);
+      localStorage.setItem("accountBalance", accountBalance);
     }
     if (phone) {
       updates.phone = phone;
@@ -81,11 +81,11 @@ function Update() {
             displayName: username,
             phone: phone,
             address: address,
-            fullname: fullname
+            fullname: fullname,
           });
 
           await update(ref(getDatabase(), "users/" + userId), updates);
-          navigate("/account")
+          navigate("/account");
           setUserUpdated(true); // Đánh dấu cập nhật của người dùng
           toast.success("Cập nhật thành công !!!");
         } catch (error) {
@@ -101,8 +101,8 @@ function Update() {
   useEffect(() => {
     if (userUpdated) {
       setUserUpdated(false);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
     }
   }, [userUpdated]);
 
@@ -111,55 +111,74 @@ function Update() {
       <div className="account">
         <h3 className="account-title">Update Account</h3>
         <form onSubmit={handleSubmit}>
-        <label>Email</label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="off"
-            value={email}
-            placeholder="Enter your email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-            disabled
-          />
-          <label>Account Balance</label>
-          <input
-            id="accountBalance"
-            type="accountBalance"
-            autoComplete="off"
-            value={accountBalance}
-            onChange={(e) => {
-              setAccountBalance(e.target.value);
-            }}
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-            
-          />
-          <label>Full Name</label>
-          <input
-            id="fullname"
-            type="fullname"
-            autoComplete="off"
-            value={fullname}
-            placeholder="Enter your full name"
-            onChange={(e) => {
-              setFullname(e.target.value);
-            }}
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-          />
-          <label>Phone</label>
-          <input
-            id="phone"
-            type="phone"
-            autoComplete="off"
-            value={phone}
-            placeholder="Enter your phone"
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }}
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-          />
+          {/* <label>Account Balance: </label> */}
+          <div className="account-balance-display">
+            Account Balance: {accountBalance}test 0
+          </div>
+
+          <div className="form-row">
+            <div>
+              <label>Username</label>
+              <input
+                id="username"
+                type="text"
+                autoComplete="off"
+                required
+                value={username}
+                placeholder="Enter your username"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+                disabled
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+              />
+            </div>
+            <div>
+              <label>Full Name</label>
+              <input
+                id="fullname"
+                type="fullname"
+                autoComplete="off"
+                value={fullname}
+                placeholder="Enter your full name"
+                onChange={(e) => {
+                  setFullname(e.target.value);
+                }}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+              />
+            </div>
+          </div>
+          <div className="form-row">
+            <div>
+              <label>Email</label>
+              <input
+                id="email"
+                type="email"
+                autoComplete="off"
+                value={email}
+                placeholder="Enter your email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+                disabled
+              />
+            </div>
+            <div>
+              <label>Phone</label>
+              <input
+                id="phone"
+                type="phone"
+                autoComplete="off"
+                value={phone}
+                placeholder="Enter your phone"
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+              />
+            </div>
+          </div>
           <label>Address</label>
           <input
             id="address"
@@ -172,21 +191,11 @@ function Update() {
             }}
             className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
           />
-          <label>Username</label>
-          <input
-            id="username"
-            type="text"
-            autoComplete="off"
-            required
-            value={username}
-            placeholder="Enter your username"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            disabled
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-          />
-          <button type="submit">Update</button>
+           <div className="update-button-container">
+            <button type="submit" className="update-button" disabled={loading}>
+              {loading ? "Updating..." : "Update"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

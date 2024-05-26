@@ -8,7 +8,7 @@
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 560px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -71,7 +71,7 @@ body {
 .container button {
     background-color: #512da8;
     color: #fff;
-    font-size: 12px;
+    font-size: 16px;
     padding: 10px 45px;
     border: 1px solid transparent;
     border-radius: 8px;
@@ -80,11 +80,10 @@ body {
     text-transform: uppercase;
     margin-top: 10px;
     cursor: pointer;
+
 }
 
-.parent-container button {
-    margin: 20px 0;
-}
+
 
 .container button.hidden {
     background-color: transparent;
@@ -93,11 +92,11 @@ body {
 
 .container form {
     background-color: #fff;
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
+    padding: 20px 40px;
     height: 100%;
 }
 
@@ -106,7 +105,7 @@ body {
     border: none;
     margin: 8px 0;
     padding: 10px 15px;
-    font-size: 13px;
+    font-size: 16px;
     border-radius: 8px;
     width: 100%;
     outline: none;
@@ -485,14 +484,17 @@ span {
     .pet-manage {
         padding-top: 0 !important;
     }
+
     .qr-code-page img {
         width: 25%
     }
+
     .container.form {
         margin-top: 0;
     }
+
     .container-update {
-        margin-top: 50px!important;
+        margin-top: 50px !important;
     }
 }
 
@@ -500,24 +502,31 @@ span {
     html {
         font-size: 55%;
     }
+
     .header {
         top: 10px !important
     }
+
     .account-title {
         margin: 12px 0 !important;
-}
+    }
+
     .container.container-update {
         top: 56% !important
     }
+
     .container input {
         margin: 8px 0 !important;
     }
+
     .container-update input {
         padding: 8px 16px !important;
     }
+
     .header .username {
         display: inline-block;
-        max-width: 150px; /* Adjust the width according to your layout */
+        max-width: 150px;
+        /* Adjust the width according to your layout */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -525,6 +534,7 @@ span {
         position: relative;
         bottom: 4px;
     }
+
     .empty-pet.container {
         top: 55% !important
     }
@@ -533,11 +543,12 @@ span {
         margin-top: 100px;
     }
 
-    .container.form{
+    .container.form {
         margin-top: 40px;
     }
+
     .contact h2 {
-        margin-top: 20px!important;
+        margin-top: 20px !important;
     }
 
     .pet-manage {
@@ -615,20 +626,18 @@ label {
     padding: 16px;
 }
 
-.container-update button {
-    margin: 16px 0;
-    font-size: 16px;
-}
+
 
 .pet-list h1 {
-    margin: 16px 0!important;
+    margin: 16px 0 !important;
 }
+
 .pet-list p {
-    margin: 16px 0!important;
+    margin: 16px 0 !important;
 }
 
 .pet-manage {
-    padding-top: 60px!important;
+    padding-top: 60px !important;
 }
 
 .parent-container {
@@ -688,7 +697,8 @@ label {
 
 .empty-pet-title {
     background-color: #fff;
-    padding: 40px;
+    padding: 40px; 
+    margin: 34px 0;
 }
 
 .empty-pet-title h1 {
@@ -777,6 +787,8 @@ label {
     padding-top: 100px;
 }
 
+
+
 .pagination {
     margin-top: 60px;
     list-style: none;
@@ -858,11 +870,12 @@ td[data-status="Busy"] {
     align-items: center;
     margin-bottom: 5px;
     width: 130px !important;
-  }
-  
-  .service-item input[type="checkbox"] {
+}
+
+.service-item input[type="checkbox"] {
     margin-right: 10px;
-  }
+}
+
 .appointment-form-container {
     width: 1000px;
     margin: 140px auto;
@@ -928,13 +941,13 @@ td[data-status="Busy"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .appointment-form button:hover {
+}
+
+.appointment-form button:hover {
     background-color: #45a049;
-  }
-  
-  .contact h2 {
+}
+
+.contact h2 {
     margin-top: 8rem;
     margin-bottom: 3rem;
     font-size: 5rem;
@@ -965,7 +978,8 @@ td[data-status="Busy"] {
 }
 
 .contact form .input-box input {
-    width: 49%; /* để nó tự margin cách ở giữa 2 element */
+    width: 49%;
+    /* để nó tự margin cách ở giữa 2 element */
 }
 
 .contact form textarea {
@@ -983,7 +997,8 @@ td[data-status="Busy"] {
     align-items: center;
     flex-wrap: wrap;
     padding: 2rem 9%;
-    background: #c9d6ff;    ;
+    background: #c9d6ff;
+    ;
 }
 
 .footer-text p {
@@ -1159,6 +1174,72 @@ h6.css-1731sqo-MuiTypography-root {
 }
 
 .dropdown-topbar .MuiMenuItem-root {
-    font-size: 1.5rem; /* Adjust the font size as needed */
-  }
+    font-size: 1.5rem;
+    /* Adjust the font size as needed */
+}
 
+.form-row {
+    width: 68rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    /* Adjust the gap as needed */
+    margin-bottom: 1rem;
+    /* Space between rows */
+}
+
+.form-row input {
+    align-items: center;
+    padding-right: 9rem;
+}
+
+
+input[disabled] {
+    background-color: #f0f0f0;
+}
+
+.account-balance-display {
+    width: 100%;
+    padding: .5rem;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    /* Adjust gap as needed */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Adjust gap as needed */
+}
+
+.button-container {
+    margin-left: 25rem;
+}
+
+.flex-container {
+    display: flex;
+    gap: 20px;
+    /* Adjust gap as needed */
+}
+
+.flex-item {
+    flex: 1;
+}
+
+.image-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

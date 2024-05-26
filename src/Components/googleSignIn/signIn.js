@@ -111,7 +111,7 @@ function SignIn() {
           navigate("/manager");
           break;
         case 'admin':
-          navigate("/admin");
+          navigate("/admin/dashboard");
           break;
         default:
           navigate("/");

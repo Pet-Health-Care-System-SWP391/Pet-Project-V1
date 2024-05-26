@@ -61,26 +61,41 @@ const Book = () => {
     fetchUserData();
   }, [user]);
 
-  const addBookingToDatabase = (bookingId, name, phone, date, time, reason, services, totalPaid,amountToPay, paid) => {
+  const addBookingToDatabase = (
+    bookingId,
+    name,
+    phone,
+    date,
+    time,
+    reason,
+    services,
+    totalPaid,
+    amountToPay,
+    paid
+  ) => {
     const db = getDatabase();
-    const bookingRef = push(ref(db, 'users/' + userId + '/bookings'), {
-      name: name,
-      phone: phone,
-      date: date,
-      time: time,
-      reason: reason,
-      bookingId: bookingId,
-      services: services,
-      totalPaid: totalPaid,
-      amountToPay: amountToPay,
-      paid: paid // Add a field to track payment status
-    }, function (error) {
-      if (error) {
-        alert('Error adding booking');
-      } else {
-        alert('Booking added successfully!');
+    const bookingRef = push(
+      ref(db, "users/" + userId + "/bookings"),
+      {
+        name: name,
+        phone: phone,
+        date: date,
+        time: time,
+        reason: reason,
+        bookingId: bookingId,
+        services: services,
+        totalPaid: totalPaid,
+        amountToPay: amountToPay,
+        paid: paid, // Add a field to track payment status
+      },
+      function (error) {
+        if (error) {
+          alert("Error adding booking");
+        } else {
+          alert("Booking added successfully!");
+        }
       }
-    });
+    );
   };
 
   const handleServiceChange = (event) => {
@@ -142,7 +157,7 @@ const Book = () => {
       navigate("/");
     } else {
       // If accountBalance is not sufficient, calculate remaining amount to pay and navigate to QR page for payment
-      const amountToPay = (totalPaid - accountBalance)*1000;
+      const amountToPay = (totalPaid - accountBalance) * 1000;
       const qrUrl = `https://img.vietqr.io/image/MB-0000418530364-print.png?amount=${amountToPay}&addInfo=thanhtoan%20${bookingId}&accountName=Nguyen%20Cong%20Duy%20Bao`;
       console.log(qrUrl); // Log the QR URL to check it
       setTotalPaid(totalPaid);
@@ -155,7 +170,7 @@ const Book = () => {
         reason,
         service,
         totalPaid,
-        amountToPay/1000,
+        amountToPay / 1000,
         false
       );
       navigate("/qr", { state: { qrUrl, bookingId } });
@@ -215,6 +230,24 @@ const Book = () => {
         </div>
 
         <div>
+          <label htmlFor="vet">Bác sĩ:</label>
+          <input
+            type="dropdown-menu"
+            id="text"
+            value={vet}
+            onChange={(e) => setVet(e.target.value)}
+            required
+          />
+          <label htmlFor="pet">Thú cưng:</label>
+          <input
+            type="dropdown-menu"
+            id="text"
+            value={vet}
+            onChange={(e) => setVet(e.target.value)}
+            required
+          />
+        </div>
+        <div>
           <label>Dịch vụ:</label>
           {services.map((service) => (
             <div key={service.name}>
@@ -229,17 +262,6 @@ const Book = () => {
               </label>
             </div>
           ))}
-        </div>
-
-        <div>
-          <label htmlFor="vet">Bác sĩ:</label>
-          <input
-            type="dropdown-menu"
-            id="text"
-            value={vet}
-            onChange={(e) => setVet(e.target.value)}
-            required
-          />
         </div>
 
         <div className="full-width">
