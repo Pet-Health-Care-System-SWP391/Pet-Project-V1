@@ -22,38 +22,61 @@ import QrCodePage from "../src/view/qr/QrCodePage";
 import Transaction from "../src/Components/transaction/TransactionHistory";
 import { TransactionProvider } from "../src/Components/context/TransactionContext";
 import ForgotPassword from "./Components/googleSignIn/ForgotPassword";
+import { CircularProgress } from "@mui/material";
+
 
 function MainContent() {
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("");
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
     });
     setCurrentPath(location.pathname);
+    const handleLoading = () => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    };
 
-    return unsubscribe; // Clean up listener on component unmount
-  },[location.pathname]);
+    handleLoading();
+
+    return () => {
+      unsubscribe();
+      clearTimeout(handleLoading);
+    };
+  }, [location.pathname]);
   return (
     <div className="App">
-      {/* {location.pathname === "/" && <Header user={user} />} */}
-      <Header user={user} currentPath={currentPath} />
-      <Routes>
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/account" element={<Update user={user} />} />
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="/manager" element={<Manager />} />
-        <Route path="/pet" element={<Pet />} />
-        <Route path="/pet/add" element={<AddPet />} />
-        <Route path="/book" element={<Book />} />
-        <Route path="/qr" element={<QrCodePage />} />
-        <Route path="/transaction-history" element={<Transaction />} />
-        <Route path="/reset" element={<ForgotPassword />} />
-      </Routes>
-    </div>
+    {loading && (
+      <div className="loading-spinner">
+        <CircularProgress />
+      </div>
+    )}
+    {!loading && (
+      <>
+        <Header user={user} currentPath={currentPath} />
+        <Routes>
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/account" element={<Update user={user} />} />
+          <Route path="/admin/*" element={<Admin />} />
+          <Route path="/manager" element={<Manager />} />
+          <Route path="/pet" element={<Pet />} />
+          <Route path="/pet/add" element={<AddPet />} />
+          <Route path="/book" element={<Book />} />
+          <Route path="/qr" element={<QrCodePage />} />
+          <Route path="/transaction-history" element={<Transaction />} />
+          <Route path="/reset" element={<ForgotPassword />} />
+        </Routes>
+      </>
+    )}
+  </div>
   );
 }
 

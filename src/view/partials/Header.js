@@ -15,6 +15,7 @@ function Header({ user, currentPath }) {
   const [fullname, setFullname] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
+  const [role, setRole] = useState("");
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -73,7 +74,10 @@ function Header({ user, currentPath }) {
 
       onValue(userRef, (snapshot) => {
         const data = snapshot.val();
-        console.log(data.bookings)
+        console.log(data.bookings);
+        console.log(data.role);
+        setRole(data.role);
+
         if (data) {
           setUsername(data.username);
           setFullname(data.fullname);
@@ -124,16 +128,21 @@ function Header({ user, currentPath }) {
   const contactPage = () => {
     navigate("/#contact");
   };
-
-  const shouldShowHeader = !currentPath.startsWith("/admin") && currentPath !== "/manager" && currentPath !== "/veterinary";
+  const adminDashboard = () => {
+    toggleDropdown();
+    navigate("/admin/dashboard");
+  };
+  const shouldShowHeader =
+    !currentPath.startsWith("/admin") &&
+    currentPath !== "/manager" &&
+    currentPath !== "/veterinary";
 
   if (!shouldShowHeader) {
     return null; // Don't render the header if it's a login or admin page
   }
 
-
   return (
-    <header className={`header ${headerVisible ? '' : 'hidden'}`}>
+    <header className={`header ${headerVisible ? "" : "hidden"}`}>
       <a href="#home" onClick={homePage} className="logo">
         <FontAwesomeIcon icon={faPaw} /> Pet Center
       </a>
@@ -167,8 +176,8 @@ function Header({ user, currentPath }) {
         >
           Contact
         </a>
-        {shouldShowHeader && (
-          user && isVerified ? (
+        {shouldShowHeader &&
+          (user && isVerified ? (
             <div className="dropdown" ref={dropdownRef}>
               <span onClick={toggleDropdown} className="username">
                 {user.displayName || username || fullname}
@@ -176,13 +185,13 @@ function Header({ user, currentPath }) {
               <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
                 <div onClick={updateAccount}>Account</div>
                 <div onClick={pet}>Pet</div>
+                {role==='admin' && <div onClick={adminDashboard}>Admin Dashboard</div>}
                 <div onClick={logout}>Logout</div>
               </div>
             </div>
           ) : (
             <button onClick={login}>Login</button>
-          )
-        )}
+          ))}
       </nav>
     </header>
   );

@@ -113,7 +113,7 @@ function Update() {
         <form onSubmit={handleSubmit}>
           {/* <label>Account Balance: </label> */}
           <div className="account-balance-display">
-            Account Balance: {accountBalance}test 0
+            Account Balance: {accountBalance}
           </div>
 
           <div className="form-row">

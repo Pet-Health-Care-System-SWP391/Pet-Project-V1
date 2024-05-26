@@ -4,11 +4,15 @@ import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import Home from "../../view/partials/Home";
 import { useNavigate } from "react-router-dom";
-import { fetchSignInMethodsForEmail, updateProfile, sendEmailVerification, onAuthStateChanged  } from "firebase/auth";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  fetchSignInMethodsForEmail,
+  updateProfile,
+  sendEmailVerification,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getDatabase, ref, set, onValue, get, update } from "firebase/database";
-
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -20,7 +24,7 @@ function SignIn() {
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         navigate("/"); // Redirect to home page if user is already logged in
@@ -31,45 +35,46 @@ function SignIn() {
 
   function addDataBase(userId, email, name, role) {
     const db = getDatabase();
-    set(ref(db, 'users/' + userId), {
-      email: email,
-      username: name,
-      role: role,
-      isVerified: false,
-    }, function (error) {
-      if (error) {
-        alert('Lỗi');
-      } else {
-        alert('Thành Công !!!');
+    set(
+      ref(db, "users/" + userId),
+      {
+        email: email,
+        username: name,
+        role: role,
+        isVerified: false,
+      },
+      function (error) {
+        if (error) {
+          alert("Lỗi");
+        } else {
+          alert("Thành Công !!!");
+        }
       }
-    });
+    );
   }
 
-
-
   const handleGoogleLogin = async () => {
-  
     try {
       const data = await signInWithPopup(auth, provider);
       const userEmail = data.user.email;
-      const userNamePart = userEmail.split('@')[0];
-      const userName = 'gg' + userNamePart;
+      const userNamePart = userEmail.split("@")[0];
+      const userName = "gg" + userNamePart;
       const userId = data.user.uid;
       const db = getDatabase();
-      const userRef = ref(db, 'users/' + userId);
-      let userRole = 'user';
-      console.log('User Email:', userEmail);
-    console.log('Generated Username:', userName);
-    console.log('User ID:', userId);
+      const userRef = ref(db, "users/" + userId);
+      let userRole = "user";
+      console.log("User Email:", userEmail);
+      console.log("Generated Username:", userName);
+      console.log("User ID:", userId);
       // Kiểm tra và lấy dữ liệu người dùng từ Firebase
       const userDataSnapshot = await new Promise((resolve) => {
         onValue(userRef, (snapshot) => {
           resolve(snapshot);
         });
       });
-      
+
       const userData = userDataSnapshot.val();
-      console.log('User Data from Firebase:', userData);
+      console.log("User Data from Firebase:", userData);
       // Nếu người dùng chưa tồn tại trong cơ sở dữ liệu, thêm người dùng
       if (!userData) {
         await set(userRef, {
@@ -77,16 +82,19 @@ function SignIn() {
           username: userName,
           role: userRole,
           isVerified: true,
-          accountBalance: 0
+          accountBalance: 0,
         });
       } else {
-        userRole = userData.role || 'user';
+        userRole = userData.role || "user";
         await set(userRef, {
           ...userData,
-          username: userName
+          username: userName,
+          role: userRole,
+          isVerified: true,
+          accountBalance: 0,
         });
       }
-  
+
       // Đọc dữ liệu thú cưng của người dùng từ Firebase sau khi đăng nhập thành công
       const petRef = ref(db, "users/" + userId + "/pets");
       const pets = await new Promise((resolve) => {
@@ -95,35 +103,34 @@ function SignIn() {
           resolve(petData ? Object.values(petData) : []);
         });
       });
-  
+
       // Lưu dữ liệu thú cưng vào state hoặc localStorage nếu cần
       localStorage.setItem("pets", JSON.stringify(pets));
-  
+
       // Điều hướng dựa trên vai trò của người dùng
       switch (userRole) {
-        case 'user':
+        case "user":
           navigate("/");
           break;
-        case 'veterinarian':
+        case "veterinarian":
           navigate("/veterinarian");
           break;
-        case 'manager':
+        case "manager":
           navigate("/manager");
           break;
-        case 'admin':
+        case "admin":
           navigate("/admin/dashboard");
           break;
         default:
           navigate("/");
       }
-  
+
       toast.success("Login successfully. Wish you enjoy our best experience");
     } catch (error) {
       setError(error.message);
       toast.error("Login failed. Please try again.");
     }
   };
-  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -132,7 +139,7 @@ function SignIn() {
       return; // Prevent form submission
     }
 
-    const username = email.split('@')[0];
+    const username = email.split("@")[0];
 
     const expression = /^[^@]+@\w+(\.\w+)+\w$/;
     if (!expression.test(email)) {
@@ -143,9 +150,7 @@ function SignIn() {
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
     if (signInMethods.length > 0) {
       setIsRegistering(false); // Allow user to edit registration info
-      toast.error(
-        "This email is used by another user, please try again!"
-      );
+      toast.error("This email is used by another user, please try again!");
       return; // Prevent form submission
     }
 
@@ -163,12 +168,14 @@ function SignIn() {
           displayName: username,
           role: "user",
           isVerified: false,
-          accountBalance: 0
-        }); 
-        addDataBase(userId, email, username, "user", ); // Omit password from user data
+          accountBalance: 0,
+        });
+        addDataBase(userId, email, username, "user"); // Omit password from user data
         // window.location.reload();
         navigate("/"); // Redirect to home page
-        toast.success("Registration successful. Please check your email for verification then login to our system again.");
+        toast.success(
+          "Registration successful. Please check your email for verification then login to our system again."
+        );
       } catch (error) {
         // Handle Firebase errors (e.g., weak password)
         toast.error("This email is used by another user, please try again!");
@@ -194,9 +201,13 @@ function SignIn() {
   const handleEmailLogin = async (event) => {
     event.preventDefault(); // Ngăn hành vi mặc định của biểu mẫu
     setError(null); // Xóa các lỗi trước đó
-  
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       if (!user.emailVerified) {
         toast.error("Please verify your email before logging in.");
@@ -208,65 +219,73 @@ function SignIn() {
       localStorage.setItem("email", userEmail); // Xem xét việc lưu trữ an toàn trong sản xuất
       const userId = user.uid;
       const db = getDatabase();
-      const userRef = ref(db, 'users/' + userId);
-      let userRole = 'user';
-  
+      const userRef = ref(db, "users/" + userId);
+      let userRole = "user";
+
       // Kiểm tra và lấy dữ liệu người dùng từ Firebase
       const userDataSnapshot = await new Promise((resolve) => {
-        onValue(userRef, (snapshot) => {
-          resolve(snapshot);
-        }, { onlyOnce: true });
+        onValue(
+          userRef,
+          (snapshot) => {
+            resolve(snapshot);
+          },
+          { onlyOnce: true }
+        );
       });
-  
+
       const userData = userDataSnapshot.val();
-      console.log('User Data from Firebase:', userData);
-  
+      console.log("User Data from Firebase:", userData);
+
       if (!userData) {
         await set(userRef, {
           email: userEmail,
           username: user.displayName,
           role: userRole,
           isVerified: true,
-          accountBalance: 0 // Thiết lập accountBalance mặc định là 0 nếu người dùng không tồn tại
+          accountBalance: 0, // Thiết lập accountBalance mặc định là 0 nếu người dùng không tồn tại
         });
       } else {
-        userRole = userData.role || 'user';
+        userRole = userData.role || "user";
         // Chỉ cập nhật accountBalance nếu nó chưa tồn tại
         if (userData.accountBalance === undefined) {
           await update(userRef, {
-            accountBalance: 0
+            accountBalance: 0,
           });
         }
         // Cập nhật các trường khác mà không làm thay đổi accountBalance
         await update(userRef, {
           username: user.displayName,
           role: userRole,
-          isVerified: userData.isVerified
+          isVerified: userData.isVerified,
         });
       }
-  
+
       const petRef = ref(db, "users/" + userId + "/pets");
       const pets = await new Promise((resolve) => {
-        onValue(petRef, (snapshot) => {
-          const petData = snapshot.val();
-          resolve(petData ? Object.values(petData) : []);
-        }, { onlyOnce: true });
+        onValue(
+          petRef,
+          (snapshot) => {
+            const petData = snapshot.val();
+            resolve(petData ? Object.values(petData) : []);
+          },
+          { onlyOnce: true }
+        );
       });
-  
+
       // Lưu dữ liệu thú cưng vào state hoặc localStorage nếu cần
       localStorage.setItem("pets", JSON.stringify(pets));
-  
+
       switch (userRole) {
-        case 'user':
+        case "user":
           navigate("/");
           break;
-        case 'veterinarian':
+        case "veterinarian":
           navigate("/veterinarian");
           break;
-        case 'manager':
+        case "manager":
           navigate("/manager");
           break;
-        case 'admin':
+        case "admin":
           navigate("/admin");
           break;
         default:
@@ -274,11 +293,11 @@ function SignIn() {
       }
       toast.success("Login successfully. Wish you enjoy our best experience");
     } catch (error) {
-      toast.error("Something went wrong. Please check your email or password and try again!");
+      toast.error(
+        "Something went wrong. Please check your email or password and try again!"
+      );
     }
   };
-  
-  
 
   const handleClickButtonReg = async () => {
     const container = document.getElementById("container");
@@ -289,7 +308,6 @@ function SignIn() {
     container.classList.remove("active");
   };
 
-  
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
     setUserEmail(storedEmail);
@@ -298,7 +316,7 @@ function SignIn() {
   useEffect(() => {
     const updateUserVerificationStatus = async (user) => {
       if (user && user.emailVerified) {
-        const userRef = ref(database, 'users/' + user.uid);
+        const userRef = ref(database, "users/" + user.uid);
         await update(userRef, { isVerified: true });
       }
     };
@@ -321,25 +339,27 @@ function SignIn() {
               <form onSubmit={onSubmit}>
                 <h1>Create Account</h1>
                 <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>Login with Google</button>
+                  <button type="button" onClick={handleGoogleLogin}>
+                    Login with Google
+                  </button>
                 </div>
                 <span>or use your email for registeration</span>
                 <input
-                id="email"
+                  id="email"
                   type="email"
                   autoComplete="off"
                   required
                   value={email}
-                  placeholder ="Input your email"
+                  placeholder="Input your email"
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
                   className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
                 />
                 <input
-                id="password"
+                  id="password"
                   disabled={isRegistering}
-                  placeholder ="Input your password"
+                  placeholder="Input your password"
                   type="password"
                   autoComplete="off"
                   required
@@ -356,7 +376,7 @@ function SignIn() {
                   <input
                     disabled={isRegistering}
                     type="password"
-                  placeholder ="Confirm your password"
+                    placeholder="Confirm your password"
                     autoComplete="off"
                     required
                     value={confirmPassword}
@@ -383,22 +403,23 @@ function SignIn() {
               <form onSubmit={handleEmailLogin}>
                 <h1>Sign In</h1>
                 <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>Login with Google</button>
+                  <button type="button" onClick={handleGoogleLogin}>
+                    Login with Google
+                  </button>
                 </div>
                 <span>or use your email password</span>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  placeholder ="Input your email"
+                  placeholder="Input your email"
                   value={email}
                   onChange={handleChange}
                   required
                 />
                 <input
                   type="password"
-                  placeholder ="Input your password"
-
+                  placeholder="Input your password"
                   id="password"
                   name="password"
                   value={password}
