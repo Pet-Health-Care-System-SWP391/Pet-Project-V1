@@ -1,13 +1,17 @@
 /* admin page css */
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
 
-
+body,
 #root,
 .app,
 .content {
-   height: 100%;
+    height: 100%;
     width: 100%;
     font-family: "Source Sans Pro", sans-serif;
+}
+
+.content {
+    background-color: #222121;
 }
 
 .app {
@@ -34,6 +38,31 @@
     background: #555;
 }
 
+input.css-1rv476z-MuiInputBase-input-MuiFilledInput-input {
+    background-color: black;
+}
+
+.css-1fuaiuw {
+    margin-top: 100px;
+}
+
+label.css-8w7i53-MuiFormLabel-root-MuiInputLabel-root {
+    font-size: 1.5rem;
+}
+
+button.css-wnx1cx-MuiButtonBase-root-MuiButton-root {
+    font-size: 1.5rem;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 1.5em;
+    font-size: 1.5rem;
+}
+
+span.css-47iiw-MuiTypography-root {
+    color: #000000;
+    font-size: 1.5rem;
+}
 
 
 svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-havevq-MuiSvgIcon-root {
@@ -44,4 +73,111 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-havevq-MuiSvgIcon-root {
 p.css-17w9904-MuiTypography-root {
     font-size: 1.5rem;
     color: white;
+}
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-havevq-MuiSvgIcon-root {
+    font-size: 2.5rem;
+    color: white;
+}
+
+p.css-17w9904-MuiTypography-root {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.css-t89xny-MuiDataGrid-columnHeaderTitle {
+    text-overflow: ellipsis;
+    font-size: 17px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: var(--unstable_DataGrid-headWeight);
+}
+
+.css-ahcoh0-MuiDataGrid-root .MuiDataGrid-cell--textLeft {
+    text-align: left;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    font-size: 12px;
+}
+
+.css-bvbdia-MuiTablePagination-root .MuiTablePagination-selectLabel {
+    font-size: 1.5rem;
+    display: none;
+}
+
+.css-7ms3qr-MuiTablePagination-displayedRows {
+
+    font-size: 1.5rem;
+
+}
+
+.css-wywq3z-MuiSelect-select-MuiInputBase-input.css-wywq3z-MuiSelect-select-MuiInputBase-input.css-wywq3z-MuiSelect-select-MuiInputBase-input {
+    padding-right: 24px;
+    font-size: 1.5rem;
+    min-width: 16px;
+}
+
+p.css-7ms3qr-MuiTablePagination-displayedRows {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.43;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+}
+
+.css-bvbdia-MuiTablePagination-root .MuiTablePagination-input {
+    display: none;
+    font-size: 1.5rem;
+}
+
+li.css-1f0imsr-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem {
+    font-size: 1.5rem;
+}
+
+input.css-156xqnd-MuiInputBase-input {
+    font-size: 1.5rem;
+}
+
+h6.css-1731sqo-MuiTypography-root {
+    color: white;
+    font-size: 2.5rem;
+}
+
+.dropdown-topbar .MuiMenuItem-root {
+    font-size: 1.5rem;
+    /* Adjust the font size as needed */
+}
+
+.MuiBox-root .css-j85fv7 {
+    margin-top: .5rem;
+}
+
+.MuiBox-root .css-av820f {
+    margin-top: .5rem;
+}
+
+p.css-13zd3um-MuiTypography-root {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+}
+
+p.css-1dl7p6k-MuiTypography-root {
+    font-size: 2rem;
+}
+
+button.css-bg5st4-MuiButtonBase-root-MuiButton-root{
+    font-size: 1.5rem;
+    background-color: green;
+}
+div.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    padding-right: 140px;
+    /* margin: 0 50px;
+    display: flex; */
+}
+.css-de9k3v-MuiDataGrid-selectedRowCount{
+    font-size: 1.5rem;
 }

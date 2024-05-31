@@ -171,7 +171,7 @@ function SignIn() {
           accountBalance: 0,
         });
         addDataBase(userId, email, username, "user"); // Omit password from user data
-        // window.location.reload();
+        await auth.signOut();
         navigate("/"); // Redirect to home page
         toast.success(
           "Registration successful. Please check your email for verification then login to our system again."
@@ -286,7 +286,7 @@ function SignIn() {
           navigate("/manager");
           break;
         case "admin":
-          navigate("/admin");
+          navigate("/admin/dashboard");
           break;
         default:
           navigate("/");
@@ -334,128 +334,132 @@ function SignIn() {
     <div>
       {!userEmail && ( // Only show login options if not logged in
         <>
-          <div className="container form" id="container">
-            <div className="form-container sign-up">
-              <form onSubmit={onSubmit}>
-                <h1>Create Account</h1>
-                <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>
-                    Login with Google
-                  </button>
-                </div>
-                <span>or use your email for registeration</span>
-                <input
-                  id="email"
-                  type="email"
-                  autoComplete="off"
-                  required
-                  value={email}
-                  placeholder="Input your email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                  className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-                />
-                <input
-                  id="password"
-                  disabled={isRegistering}
-                  placeholder="Input your password"
-                  type="password"
-                  autoComplete="off"
-                  required
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-                />
-                <div>
-                  <label className="text-sm text-gray-600 font-bold">
-                    Confirm Password
-                  </label>
+          <div className="signin-form">
+            <div className="container form" id="signin-container">
+              <div className="form-container sign-up">
+                <form onSubmit={onSubmit}>
+                  <h1>Create Account</h1>
+                  <div className="social-icons">
+                    <button type="button" onClick={handleGoogleLogin}>
+                      Login with Google
+                    </button>
+                  </div>
+                  <span>or use your email for registeration</span>
                   <input
-                    disabled={isRegistering}
-                    type="password"
-                    placeholder="Confirm your password"
+                    id="email"
+                    type="email"
                     autoComplete="off"
                     required
-                    value={confirmPassword}
+                    value={email}
+                    placeholder="Input your email"
                     onChange={(e) => {
-                      setconfirmPassword(e.target.value);
+                      setEmail(e.target.value);
+                    }}
+                    className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+                  />
+                  <input
+                    id="password"
+                    disabled={isRegistering}
+                    placeholder="Input your password"
+                    type="password"
+                    autoComplete="off"
+                    required
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
                     }}
                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
                   />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isRegistering}
-                  className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
-                    isRegistering
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300"
-                  }`}
-                >
-                  {isRegistering ? "Signing Up..." : "Sign Up"}
-                </button>
-              </form>
-            </div>
-            <div class="form-container sign-in">
-              <form onSubmit={handleEmailLogin}>
-                <h1>Sign In</h1>
-                <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>
-                    Login with Google
-                  </button>
-                </div>
-                <span>or use your email password</span>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Input your email"
-                  value={email}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Input your password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={handleChange}
-                  required
-                />
-                <a href="/reset">Forget Your Password?</a>
-                <button>Sign In</button>
-              </form>
-            </div>
-            <div className="toggle-container">
-              <div className="toggle">
-                <div className="toggle-panel toggle-left">
-                  <h1>Welcome Back!</h1>
-                  <p>Enter your personal details to use all of site features</p>
+                  <div>
+                    <label className="text-sm text-gray-600 font-bold">
+                      Confirm Password
+                    </label>
+                    <input
+                      disabled={isRegistering}
+                      type="password"
+                      placeholder="Confirm your password"
+                      autoComplete="off"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setconfirmPassword(e.target.value);
+                      }}
+                      className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                    />
+                  </div>
                   <button
-                    className="hidden"
-                    id="login"
-                    onClick={handleClickButtonLog}
+                    type="submit"
+                    disabled={isRegistering}
+                    className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
+                      isRegistering
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300"
+                    }`}
                   >
-                    Sign In
+                    {isRegistering ? "Signing Up..." : "Sign Up"}
                   </button>
-                </div>
-                <div className="toggle-panel toggle-right">
-                  <h1>Hello, Friend!</h1>
-                  <p>
-                    Register with your personal details to use all of site
-                    features
-                  </p>
-                  <button
-                    className="hidden"
-                    id="register"
-                    onClick={handleClickButtonReg}
-                  >
-                    Sign Up
-                  </button>
+                </form>
+              </div>
+              <div class="form-container sign-in">
+                <form onSubmit={handleEmailLogin}>
+                  <h1>Sign In</h1>
+                  <div className="social-icons">
+                    <button type="button" onClick={handleGoogleLogin}>
+                      Login with Google
+                    </button>
+                  </div>
+                  <span>or use your email password</span>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Input your email"
+                    value={email}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    type="password"
+                    placeholder="Input your password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <a href="/reset">Forget Your Password?</a>
+                  <button>Sign In</button>
+                </form>
+              </div>
+              <div className="toggle-container">
+                <div className="toggle">
+                  <div className="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>
+                      Enter your personal details to use all of site features
+                    </p>
+                    <button
+                      className="hidden"
+                      id="login"
+                      onClick={handleClickButtonLog}
+                    >
+                      Sign In
+                    </button>
+                  </div>
+                  <div className="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>
+                      Register with your personal details to use all of site
+                      features
+                    </p>
+                    <button
+                      className="hidden"
+                      id="register"
+                      onClick={handleClickButtonReg}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

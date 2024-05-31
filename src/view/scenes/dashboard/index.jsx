@@ -12,10 +12,55 @@ import GeographyChart from "../../../Components/dashboardChart/GeographyChart";
 import BarChart from "../../../Components/dashboardChart/BarChart";
 import StatBox from "../../../Components/dashboardChart/StatBox";
 import ProgressCircle from "../../../Components/dashboardChart/ProgressCircle";
+import React, { useState, useEffect } from "react";
+
+import { auth, database } from "../../../Components/firebase/firebase"; // Import the correct database instance
+
+import { ref, get } from "firebase/database";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [revenue, setRevenue] = useState(0);
+
+let totalPaid =0;
+  const fetchUsers = async () => {
+    try {
+      const snapshot = await get(ref(database, "users"));
+      if (snapshot.exists()) {
+        const usersData = snapshot.val();
+        const mockDataTeam = []; // Initialize the array here
+        for (const userId in usersData) {
+          if (usersData.hasOwnProperty(userId)) {
+            const user = usersData[userId];
+            const bookings = user.bookings || {}; // Ensure bookings exist
+
+            // Calculate totalPay from bookings
+            for (const bookingId in bookings) {
+              if (bookings.hasOwnProperty(bookingId)) {
+                totalPaid += bookings[bookingId].totalPaid || 0; // Add totalPay, ensure it exists
+              }
+            }
+
+            mockDataTeam.push({
+              id: userId, // Add id property
+              totalPaid: totalPaid, // Calculated totalPay
+              ...user, // Spread the rest of the user properties
+            });
+          }
+        }
+      } else {
+        console.log("No data available");
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+    setRevenue(totalPaid);
+  };
+
+  fetchUsers().then(() => {
+    console.log(totalPaid);
+  });
 
   return (
     <Box m="20px">
@@ -74,7 +119,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
+            title={revenue}
             subtitle="Sales Obtained"
             progress="0.50"
             increase="+21%"

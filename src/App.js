@@ -23,6 +23,8 @@ import Transaction from "../src/Components/transaction/TransactionHistory";
 import { TransactionProvider } from "../src/Components/context/TransactionContext";
 import ForgotPassword from "./Components/googleSignIn/ForgotPassword";
 import { CircularProgress } from "@mui/material";
+import Footer from "./view/partials/Footer";
+import DetailedExamination from "./view/detailedExam/Detail Exam";
 
 
 function MainContent() {
@@ -37,11 +39,12 @@ function MainContent() {
       setUser(currentUser);
     });
     setCurrentPath(location.pathname);
+
     const handleLoading = () => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-      }, 1000);
+      }, 1500);
     };
 
     handleLoading();
@@ -54,8 +57,10 @@ function MainContent() {
   return (
     <div className="App">
     {loading && (
-      <div className="loading-spinner">
-        <CircularProgress />
+      <div className="loading-dots">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     )}
     {!loading && (
@@ -73,7 +78,9 @@ function MainContent() {
           <Route path="/qr" element={<QrCodePage />} />
           <Route path="/transaction-history" element={<Transaction />} />
           <Route path="/reset" element={<ForgotPassword />} />
+          <Route path="/detailedExam" element={<DetailedExamination />}/>
         </Routes>
+        <Footer currentPath={currentPath} />
       </>
     )}
   </div>
@@ -85,7 +92,7 @@ function App() {
     <TransactionProvider>
       <Router>
         <MainContent />
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={1500} />
       </Router>
     </TransactionProvider>
   );

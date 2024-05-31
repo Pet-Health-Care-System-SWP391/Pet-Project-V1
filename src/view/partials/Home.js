@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { auth } from "../../Components/firebase/firebase"; // Assuming you have a firebase config file
 import { useNavigate } from "react-router-dom";
-import {Typed} from "react-typed";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
-import emailjs from 'emailjs-com';
+import { Typed } from "react-typed";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import emailjs from "emailjs-com";
 
 function Home() {
   const typedElement = useRef(null);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const form = useRef();
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     // Kiểm tra trạng thái đăng nhập của người dùng khi component được tải
@@ -40,15 +40,24 @@ function Home() {
   const sendEmail = (e) => {
     e.preventDefault();
     const formData = new FormData(form.current);
-    formData.append('to_name', userName);
-    emailjs.sendForm('service_9sprp0p', 'template_pz8ey59', form.current, 'gWym0COHJFeyRWp5M')
-      .then((result) => {
-        console.log(result.text);
-        toast.success("Email sent successfully!");
-      }, (error) => {
-        console.log(error.text);
-        toast.error("Failed to send email.");
-      });
+    formData.append("to_name", userName);
+    emailjs
+      .sendForm(
+        "service_9sprp0p",
+        "template_pz8ey59",
+        form.current,
+        "gWym0COHJFeyRWp5M"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          toast.success("Email sent successfully!");
+        },
+        (error) => {
+          console.log(error.text);
+          toast.error("Failed to send email.");
+        }
+      );
 
     e.target.reset();
   };
@@ -61,7 +70,6 @@ function Home() {
       backDelay: 400,
       loop: true,
     };
-
 
     const typed = new Typed(typedElement.current, options);
 
@@ -92,9 +100,7 @@ function Home() {
             </a>
           </div>
           <div className="home-img">
-            <img
-              src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/440942530_423620990437817_5689570377664203254_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=BFrjCE_IQ8AQ7kNvgHNUkAr&_nc_ht=scontent.fsgn2-6.fna&oh=00_AYAE-6ge9dx5ooH4pzNnSfurgsz5i8tv1ymwOloTS8-CyQ&oe=66576FD2"
-            />
+            <img src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/440942530_423620990437817_5689570377664203254_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=BFrjCE_IQ8AQ7kNvgHNUkAr&_nc_ht=scontent.fsgn2-6.fna&oh=00_AYAE-6ge9dx5ooH4pzNnSfurgsz5i8tv1ymwOloTS8-CyQ&oe=66576FD2" />
           </div>
         </section>
       </div>
@@ -114,29 +120,43 @@ function Home() {
         </h2>
         <form ref={form} onSubmit={sendEmail}>
           <div className="input-box">
-            <input type="text" name="from_name" placeholder="Full Name" required />
-            <input type="email" name="from_email" placeholder="Email Address" required />
+            <input
+              type="text"
+              name="from_name"
+              placeholder="Full Name"
+              required
+            />
+            <input
+              type="email"
+              name="from_email"
+              placeholder="Email Address"
+              required
+            />
           </div>
           <div className="input-box">
-            <input type="number" name="from_phone" placeholder="Mobile Number" required />
-            <input type="text" name="subject" placeholder="Your Address" required />
+            <input
+              type="number"
+              name="from_phone"
+              placeholder="Mobile Number"
+              required
+            />
+            <input
+              type="text"
+              name="subject"
+              placeholder="Your Address"
+              required
+            />
           </div>
-          <textarea name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+          <textarea
+            name="message"
+            cols="30"
+            rows="10"
+            placeholder="Your Message"
+            required
+          ></textarea>
           <input type="submit" value="Send Message" className="btn" />
         </form>
       </section>
-
-      {/* footer design */}
-      <footer className="footer">
-        <div className="footer-text">
-          <p>Copyright &copy; 2024 by NJS1804 - Team3 | All Rights Reserved.</p>
-        </div>
-        <div className="footer-iconTop" style={{fontSize: "2rem"}}>
-          <a style={{padding: "1rem 1.2rem", borderRadius: "50%", display: "inline-flex"
-    ,justifyContent: "center"
-    ,alignItems: "center", color: "#fff"}} href="#home"><FontAwesomeIcon icon={faArrowUp} /></a>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -30,7 +30,7 @@ const Topbar = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user) {console.log(user)
         setUsername(user.displayName || user.email); // Use displayName if available, otherwise fallback to email
       } else {
         setUsername(""); // Clear username if no user is logged in
@@ -65,17 +65,8 @@ const Topbar = () => {
       <Typography variant="h6" mr={2}>
         Welcome, {username}
       </Typography>
-      {/* SEARCH BAR */}
-      <Box
-        display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
-      >
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
-      </Box>
+      
+    
 
       {/* ICONS */}
       <Box display="flex">

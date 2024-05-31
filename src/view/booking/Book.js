@@ -29,6 +29,7 @@ const Book = () => {
   const [totalPaid, setTotalPaid] = useState("");
   const [service, setService] = useState([]);
   const [vet, setVet] = useState("");
+  const [pet, setPet] = useState("");
   const user = auth.currentUser;
 
   const services = [
@@ -188,11 +189,11 @@ const Book = () => {
 
   return (
     <div className="appointment-form-container">
-      <h2>Đăng Ký Hẹn Lịch Khám</h2>
+      <h2>Booking appointment</h2>
       {/* <img src='https://petpro.com.vn/assets/booking_pet.fcf232f8.png' /> */}
       <form className="appointment-form" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Tên:</label>
+          <label htmlFor="name">Name:</label>
           <input
             type="text"
             id="name"
@@ -200,7 +201,7 @@ const Book = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
-          <label htmlFor="phone">Số điện thoại:</label>
+          <label htmlFor="phone">Phone:</label>
           <input
             type="tel"
             id="phone"
@@ -211,7 +212,7 @@ const Book = () => {
         </div>
 
         <div>
-          <label htmlFor="date">Ngày:</label>
+          <label htmlFor="date">Date:</label>
           <input
             type="date"
             id="date"
@@ -219,7 +220,7 @@ const Book = () => {
             onChange={(e) => setDate(e.target.value)}
             required
           />
-          <label htmlFor="time">Giờ:</label>
+          <label htmlFor="time">Time:</label>
           <input
             type="time"
             id="time"
@@ -230,7 +231,7 @@ const Book = () => {
         </div>
 
         <div>
-          <label htmlFor="vet">Bác sĩ:</label>
+          <label htmlFor="vet">Vet:</label>
           <input
             type="dropdown-menu"
             id="text"
@@ -238,17 +239,17 @@ const Book = () => {
             onChange={(e) => setVet(e.target.value)}
             required
           />
-          <label htmlFor="pet">Thú cưng:</label>
+          <label htmlFor="pet">Pet:</label>
           <input
             type="dropdown-menu"
             id="text"
-            value={vet}
-            onChange={(e) => setVet(e.target.value)}
+            value={pet}
+            onChange={(e) => setPet(e.target.value)}
             required
           />
         </div>
         <div>
-          <label>Dịch vụ:</label>
+          <label>Services:</label>
           {services.map((service) => (
             <div key={service.name}>
               <input
@@ -265,7 +266,7 @@ const Book = () => {
         </div>
 
         <div className="full-width">
-          <label htmlFor="reason">Lý do khám:</label>
+          <label htmlFor="reason">Reason:</label>
           <textarea
             id="reason"
             value={reason}
@@ -273,7 +274,7 @@ const Book = () => {
             required
           />
         </div>
-        <button type="submit">Đăng Ký</button>
+        <button type="submit">Confirm Booking</button>
       </form>
     </div>
   );

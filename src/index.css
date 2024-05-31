@@ -96,8 +96,28 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 20px 40px;
+    padding: 40px 40px;
     height: 100%;
+}
+
+.mid-form {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+@media (min-width: 1200px) {
+    .mid-form {
+        justify-content: flex-start;
+        gap: 4rem;
+    }
+}
+
+
+
+input[disabled] {
+    background-color: #f0f0f0;
 }
 
 .container input {
@@ -109,6 +129,26 @@ body {
     border-radius: 8px;
     width: 100%;
     outline: none;
+}
+
+#signin-container {
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 470px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 40px 0;
+}
+
+.signin-form {
+    margin-top: 95.5rem;
 }
 
 .form-container {
@@ -556,7 +596,7 @@ span {
     }
 
     .qr-code-page img {
-        width: 35%
+        width: 25% !important
     }
 
     .container-update {
@@ -601,9 +641,9 @@ span {
 }
 
 .account-title {
-    font-size: 4rem;
+    font-size: 5rem;
     text-align: left;
-    padding: 0 40px;
+    padding: 0 87px;
     height: 100%;
     margin: 20px 0;
     color: #512da8;
@@ -614,6 +654,7 @@ label {
     align-self: flex-start;
     padding: 4px 0;
     height: 100%;
+
 }
 
 .container-update {
@@ -878,7 +919,7 @@ td[data-status="Busy"] {
 
 .appointment-form-container {
     width: 1000px;
-    margin: 140px auto;
+    margin: 150px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 30px;
@@ -1003,6 +1044,7 @@ td[data-status="Busy"] {
 
 .footer-text p {
     font-size: 1.6rem;
+    color: #000;
 }
 
 .footer-iconTop a {
@@ -1048,71 +1090,6 @@ td[data-status="Busy"] {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
-}
-
-
-
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-havevq-MuiSvgIcon-root {
-    font-size: 2.5rem;
-    color: white;
-}
-
-p.css-17w9904-MuiTypography-root {
-    font-size: 1.5rem;
-    color: white;
-}
-
-.css-t89xny-MuiDataGrid-columnHeaderTitle {
-    text-overflow: ellipsis;
-    font-size: 17px;
-    overflow: hidden;
-    white-space: nowrap;
-    font-weight: var(--unstable_DataGrid-headWeight);
-}
-
-.css-ahcoh0-MuiDataGrid-root .MuiDataGrid-cell--textLeft {
-    text-align: left;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-    font-size: 12px;
-}
-
-.css-bvbdia-MuiTablePagination-root .MuiTablePagination-selectLabel {
-    font-size: 1.5rem;
-    display: none;
-}
-
-.css-7ms3qr-MuiTablePagination-displayedRows {
-
-    font-size: 1.5rem;
-
-}
-
-.css-wywq3z-MuiSelect-select-MuiInputBase-input.css-wywq3z-MuiSelect-select-MuiInputBase-input.css-wywq3z-MuiSelect-select-MuiInputBase-input {
-    padding-right: 24px;
-    font-size: 1.5rem;
-    min-width: 16px;
-}
-
-p.css-7ms3qr-MuiTablePagination-displayedRows {
-    font-family: Source Sans Pro, sans-serif;
-    font-weight: 400;
-    font-size: 1.5rem;
-    line-height: 1.43;
-    -webkit-flex-shrink: 0;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-}
-
-.css-bvbdia-MuiTablePagination-root .MuiTablePagination-input {
-    display: none;
-    font-size: 1.5rem;
-}
-
-li.css-1f0imsr-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem {
-    font-size: 1.5rem;
 }
 
 input.css-1rv476z-MuiInputBase-input-MuiFilledInput-input {
@@ -1164,38 +1141,10 @@ span.css-47iiw-MuiTypography-root {
 
 }
 
-input.css-156xqnd-MuiInputBase-input {
-    font-size: 2.5rem;
-}
-
-h6.css-1731sqo-MuiTypography-root {
-    color: black;
-    font-size: 2.5rem;
-}
-
-.dropdown-topbar .MuiMenuItem-root {
-    font-size: 1.5rem;
-    /* Adjust the font size as needed */
-}
-
-.form-row {
-    width: 68rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    /* Adjust the gap as needed */
-    margin-bottom: 1rem;
-    /* Space between rows */
-}
-
-.form-row input {
-    align-items: center;
-    padding-right: 9rem;
-}
 
 
-input[disabled] {
-    background-color: #f0f0f0;
+.account {
+    margin: 30px 0;
 }
 
 .account-balance-display {
@@ -1249,4 +1198,83 @@ input[disabled] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loading-dots div {
+    width: 20px;
+    height: 20px;
+    margin: 30px;
+    border-radius: 50%;
+    background-color: #Fff;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.loading-dots div:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots div:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    to {
+        opacity: 0.3;
+        transform: translateY(-10px);
+    }
+}
+
+.slider-container {
+    width: 100%;
+    max-width: 80vw;
+    /* You can adjust this to the desired width */
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.slider-image {
+    width: 100%;
+    height: 100vh;
+    /* You can adjust this to the desired height */
+    object-fit: cover;
+}
+
+.loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.update-account-page {
+    margin-top: 95.5rem;
+}
+
+.detailedExam-container {
+    margin-top: 95.5rem;
+}
+
+label.mid-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.css-xe1wro-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+    padding-right: 10px;
+}
+.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root.Mui-selected, .MuiButtonBase-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiMenuItem-root.MuiMenuItem-gutters.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root{
+font-size: 1.5rem;
+ }
+
+.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    font-size: 1.5rem;
 }

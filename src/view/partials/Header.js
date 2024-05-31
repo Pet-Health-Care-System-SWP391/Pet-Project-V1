@@ -16,7 +16,7 @@ function Header({ user, currentPath }) {
   const [isVerified, setIsVerified] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
   const [role, setRole] = useState("");
-
+  const [isNewUser, setIsNewUser] = useState("");
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -74,9 +74,11 @@ function Header({ user, currentPath }) {
 
       onValue(userRef, (snapshot) => {
         const data = snapshot.val();
-        console.log(data.bookings);
-        console.log(data.role);
-        setRole(data.role);
+        if (data && data.role) {
+          setRole(data.role);
+        } else {
+          setRole("user"); // Default to 'user' if role is null or undefined
+        }
 
         if (data) {
           setUsername(data.username);
@@ -85,6 +87,24 @@ function Header({ user, currentPath }) {
           setHeaderVisible(true);
         }
       });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+console.log(user)
+      // Convert creationTime to Date object
+      const creationTime = new Date(user.metadata.creationTime);
+      const targetDate = new Date("2024-05-27T00:00:00Z");
+
+      // Check if the user is new
+      if (creationTime >= targetDate) {
+        setIsNewUser(true);
+        console.log("This user is a new user.");
+      } else {
+        setIsNewUser(false);
+        console.log("This user is not a new user.");
+      }
     }
   }, [user]);
 
@@ -176,6 +196,8 @@ function Header({ user, currentPath }) {
         >
           Contact
         </a>
+        {/* <div onClick={logout}>Logout</div> */}
+
         {shouldShowHeader &&
           (user && isVerified ? (
             <div className="dropdown" ref={dropdownRef}>
@@ -185,7 +207,9 @@ function Header({ user, currentPath }) {
               <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
                 <div onClick={updateAccount}>Account</div>
                 <div onClick={pet}>Pet</div>
-                {role==='admin' && <div onClick={adminDashboard}>Admin Dashboard</div>}
+                {role === "admin" && (
+                  <div onClick={adminDashboard}>Admin Dashboard</div>
+                )}
                 <div onClick={logout}>Logout</div>
               </div>
             </div>
