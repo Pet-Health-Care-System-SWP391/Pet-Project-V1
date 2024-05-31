@@ -78,7 +78,7 @@ body {
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-top: 10px;
+    margin-top: 20px;
     cursor: pointer;
 
 }
@@ -752,8 +752,12 @@ label {
 }
 
 .pet-list {
-    width: 100%;
     position: relative;
+    width: 100%;
+}
+
+.empty-pet-title span,
+.pet-list {
     font-size: 2.5rem;
 }
 
@@ -1159,11 +1163,11 @@ span.css-47iiw-MuiTypography-root {
     margin-bottom: 1.5rem;
 }
 
-.grid-container {
+.addPet-grid-container {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
-    /* Adjust gap as needed */
+
 }
 
 .form-group {
@@ -1271,9 +1275,11 @@ label.mid-form {
 .css-xe1wro-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
     padding-right: 10px;
 }
-.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root.Mui-selected, .MuiButtonBase-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiMenuItem-root.MuiMenuItem-gutters.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root{
-font-size: 1.5rem;
- }
+
+.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root.Mui-selected,
+.MuiButtonBase-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiMenuItem-root.MuiMenuItem-gutters.css-ulsoaq-MuiButtonBase-root-MuiMenuItem-root {
+    font-size: 1.5rem;
+}
 
 .css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
     font-size: 1.5rem;

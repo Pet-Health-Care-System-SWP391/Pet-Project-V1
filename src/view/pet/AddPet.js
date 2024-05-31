@@ -127,7 +127,7 @@ const AddPet = () => {
     <div className="parent-container">
       <div className="container" id="container">
         <h3 className="account-title">Add Info Pet</h3>
-        <form onSubmit={handleSubmit} className="grid-container">
+        <form onSubmit={handleSubmit} className="addPet-grid-container">
           <div className="form-group">
             <div className="flex-container">
               <div className="flex-item">
