@@ -1,9 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
 
 body,
 #root,
 .app,
 .content {
-    min-height: 100vh;
     height: 100%;
     width: 100%;
     font-family: "Source Sans Pro", sans-serif;
@@ -22,17 +22,17 @@ body,
     width: 10px;
 }
 
-
+/* Track */
 ::-webkit-scrollbar-track {
     background: #e0e0e0;
 }
 
-
+/* Handle */
 ::-webkit-scrollbar-thumb {
     background: #888;
 }
 
-
+/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
@@ -148,6 +148,7 @@ h6.css-1731sqo-MuiTypography-root {
 
 .dropdown-topbar .MuiMenuItem-root {
     font-size: 1.5rem;
+    /* Adjust the font size as needed */
 }
 
 .MuiBox-root .css-j85fv7 {
@@ -174,25 +175,10 @@ button.css-bg5st4-MuiButtonBase-root-MuiButton-root {
 
 div.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-v3zyv7-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
     padding-right: 140px;
+    /* margin: 0 50px;
+    display: flex; */
+}
+
+.css-de9k3v-MuiDataGrid-selectedRowCount {
     font-size: 1.5rem;
-
 }
-
-
-.css-6hp17o-MuiList-root-MuiMenu-list li{
-    font-size: 1.5rem;
-}
-
-.MuiDataGrid-scrollbar.MuiDataGrid-scrollbar--vertical.css-1b9e9gy {
-    position: absolute;
-    display: inline-block;
-    z-index: 6;
-    --size: calc(max(var(--DataGrid-scrollbarSize), 14px));
-    width: var(--size);
-    overflow-y: auto;
-    overflow-x: hidden;
-    outline: 0;
-    top: var(--DataGrid-topContainerHeight);
-    right: 0;
-}
-

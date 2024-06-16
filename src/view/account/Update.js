@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../Components/firebase/firebase"; 
+import { auth } from "../../Components/firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "firebase/auth"; 
+import { updateProfile } from "firebase/auth";
 import { getDatabase, ref, onValue, update } from "firebase/database";
+<<<<<<< HEAD
 import { ToastContainer, toast } from 'react-toastify';
 import useForceUpdate from '../../hooks/useForceUpdate'
+=======
+import { ToastContainer, toast } from "react-toastify";
+>>>>>>> myrepo/main
 
 function Update() {
   const [email, setEmail] = useState("");
@@ -21,13 +25,24 @@ function Update() {
   const forceUpdate = useForceUpdate(); // use the custom hook
 
 
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePhone = (phone) => {
+    const re = /^\d{10}$/; // Only allow 10 digits
+    return re.test(phone);
+  };
+
   useEffect(() => {
     if (user) {
       setUserId(user.uid);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
-      setPhone('');
-      setAddress('');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
+      setPhone("");
+      setAddress("");
     }
   }, [user]);
 
@@ -55,19 +70,19 @@ function Update() {
     event.preventDefault();
     setLoading(true);
     const updates = {};
-    if (email) {
+    if (!validateEmail(email)) {
       updates.email = email;
-      localStorage.setItem('email', email);
+      localStorage.setItem("email", email);
     }
     if (username) {
       updates.username = username;
-      localStorage.setItem('username', username);
+      localStorage.setItem("username", username);
     }
     if (accountBalance) {
       updates.accountBalance = accountBalance;
-      localStorage.setItem('accountBalance', accountBalance);
+      localStorage.setItem("accountBalance", accountBalance);
     }
-    if (phone) {
+    if (!validatePhone(phone)) {
       updates.phone = phone;
     }
     if (address) {
@@ -85,10 +100,11 @@ function Update() {
             displayName: username,
             phone: phone,
             address: address,
-            fullname: fullname
+            fullname: fullname,
           });
 
           await update(ref(getDatabase(), "users/" + userId), updates);
+<<<<<<< HEAD
           setUserUpdated(true); 
           toast.success("Cập nhật thành công !!!", {
             onClose: () => {
@@ -96,6 +112,11 @@ function Update() {
               forceUpdate();
             },
           });
+=======
+          navigate("/account");
+          setUserUpdated(true); // Đánh dấu cập nhật của người dùng
+          toast.success("Cập nhật thành công !!!");
+>>>>>>> myrepo/main
         } catch (error) {
           toast.error("Lỗi");
         }
@@ -109,13 +130,17 @@ function Update() {
   useEffect(() => {
     if (userUpdated) {
       setUserUpdated(false);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
     }
   }, [userUpdated]);
 
   return (
+<<<<<<< HEAD
     <div style={{height: "100vh"}} className="update-account-page">
+=======
+    <div className="update-account-page">
+>>>>>>> myrepo/main
       <div className="container container-update" id="container">
         <div className="account">
           <h3 className="account-title">Update Account</h3>
