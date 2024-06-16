@@ -16,16 +16,15 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
 
-import Topbar from "../../view/scenes/global/Topbar";
-import Sidebar from "../../view/scenes/global/Sidebar";
-import Dashboard from "../../view/scenes/dashboard/index";
-import Team from "../../view/scenes/team/index";
-import Bar from "../../view/scenes/bar/index";
-import Form from "../../view/scenes/form/index";
-import Line from "../../view/scenes/line/index";
-import Pie from "../../view/scenes/pie/index";
-import FAQ from "../../view/scenes/faq/index";
-import Calendar from "../../view/scenes/calendar/calendar";
+import Topbar from "../scenes/admin-scenes/global/Topbar"
+import Sidebar from "../scenes/admin-scenes/global/Sidebar";
+import Dashboard from "../scenes/admin-scenes/dashboard/index";
+import Team from "../../view/scenes/admin-scenes/team/index";
+import Bar from "../../view/scenes/admin-scenes/bar/index";
+import Form from "../../view/scenes/admin-scenes/form/index";
+import Line from "../../view/scenes/admin-scenes/line/index";
+import Pie from "../../view/scenes/admin-scenes/pie/index";
+import Calendar from "../../view/scenes/admin-scenes/calendar/calendar";
 import { auth } from "../../Components/firebase/firebase";
 
 function Admin() {
@@ -111,7 +110,6 @@ function Admin() {
               <Route path="bar" element={<Bar />} />
               <Route path="pie" element={<Pie />} />
               <Route path="line" element={<Line />} />
-              <Route path="faq" element={<FAQ />} />
               <Route path="calendar" element={<Calendar />} />
             </Routes>
           </main>

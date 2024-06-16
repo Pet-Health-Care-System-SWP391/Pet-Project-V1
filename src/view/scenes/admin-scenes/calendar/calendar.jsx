@@ -12,8 +12,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Header from "../../../Components/dashboardChart/Header";
-import { tokens } from "../../../theme";
+import Header from "../../../../Components/dashboardChart/Header";
+import { tokens } from "../../../../theme";
 
 const Calendar = () => {
   const theme = useTheme();

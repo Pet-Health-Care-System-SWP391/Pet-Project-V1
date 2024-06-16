@@ -21,6 +21,7 @@ import NotFound from "../src/view/invalidPage/404Page"
 import { auth } from "./Components/firebase/firebase";
 import "./App.css";
 import Rating from "./view/booking/RateBooking"
+import VetDashboard from "./view/vet/VetDashboard";
 
 function MainContent() {
   const location = useLocation();
@@ -71,6 +72,7 @@ function MainContent() {
               <Route path="/admin/*" element={<Admin />} />
               <Route path="/manager" element={<Manager />} />
               <Route path="/pet" element={<Pet />} />
+              <Route path="/vet/*" element={<VetDashboard />} />
               <Route path="/pet/add" element={<AddPet />} />
               <Route path="/pet/add/details" element={<AddPetNext />} />
               <Route path="/pet-details/:petId" element={<PetDetail />} />

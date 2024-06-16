@@ -5,8 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw, faUser } from "@fortawesome/free-solid-svg-icons";
 import { updateProfile } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
-import {RiUserLine} from '@remixicon/react';
-
+import { RiUserLine } from "@remixicon/react";
 
 function Header({ user, currentPath }) {
   const navigate = useNavigate();
@@ -132,15 +131,15 @@ function Header({ user, currentPath }) {
   };
 
   const aboutPage = () => {
-    navigate("/")
+    navigate("/");
   };
-  
+
   const servicesPage = () => {
-    navigate("/")
+    navigate("/");
   };
-  
+
   const contactPage = () => {
-    navigate("/")
+    navigate("/");
   };
 
   const adminDashboard = () => {
@@ -161,8 +160,8 @@ function Header({ user, currentPath }) {
     !location.pathname.startsWith("/manager") &&
     !location.pathname.startsWith("/veterinarian") &&
     !location.pathname.startsWith("/booking-details") &&
-    !location.pathname.startsWith("/rate-booking");
-    
+    !location.pathname.startsWith("/rate-booking") &&
+    !location.pathname.startsWith("/vet");
 
   if (!shouldShowHeader) {
     return null; // Don't render the header if it's a login or admin page
@@ -206,7 +205,7 @@ function Header({ user, currentPath }) {
         {user && isVerified ? (
           <div className="dropdown" ref={dropdownRef}>
             <span onClick={toggleDropdown} className="username">
-            <FontAwesomeIcon className="icon" icon={faUser} />
+              <FontAwesomeIcon className="icon" icon={faUser} />
               {fullname || user.displayName || username}
             </span>
             <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
@@ -224,7 +223,7 @@ function Header({ user, currentPath }) {
               )}
               <div onClick={logout}>Logout</div>
             </div>
-            </div>
+          </div>
         ) : (
           <button onClick={login}>Login</button>
         )}
