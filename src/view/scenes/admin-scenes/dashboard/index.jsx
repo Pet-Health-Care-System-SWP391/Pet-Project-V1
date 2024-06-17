@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../../theme";
@@ -31,6 +30,7 @@ const Dashboard = () => {
   const [yearlyRevenueChange, setYearlyRevenueChange] = useState("0%");
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
   const [isCustomDateSelected, setIsCustomDateSelected] = useState(false);
+  const [newUser, setNewUser] = useState("");
 
   const getTotalPaid = (date, type) => {
     let totalPaid = 0;
@@ -164,7 +164,8 @@ const Dashboard = () => {
     updateRevenue();
 
     const intervalId = setInterval(updateRevenue, 60);
-return () => clearInterval(intervalId);
+
+    return () => clearInterval(intervalId);
   }, [isCustomDateSelected]);
 
   useEffect(() => {
@@ -180,6 +181,25 @@ return () => clearInterval(intervalId);
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
   };
+
+  useEffect(() => {
+    let newUserCount = 0;
+    mockDataTeam.forEach((user) => {
+      if (user.creationTime) {
+        const date = new Date(user.creationTime);
+        const day = date.getDate();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        let fullDate = `${year}-${month}-${day}`;
+        // console.log(fullDate);
+        // console.log(getCurrentDate());
+        if (fullDate > getCurrentDate()) {
+          console.log("new user");
+          setNewUser((newUserCount += 1));
+        }
+      }
+    });
+  });
 
   return (
     <Box m="20px">
@@ -269,8 +289,8 @@ return () => clearInterval(intervalId);
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
+            title={newUser}
+            subtitle="New User"
             progress="0.80"
             increase="+43%"
             icon={
@@ -343,7 +363,7 @@ return () => clearInterval(intervalId);
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Sales Quantity thống kê số lượng dịch vụ by month
+            Sales Quantity By Month
           </Typography>
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
@@ -391,14 +411,20 @@ return () => clearInterval(intervalId);
               </Box>
               <Box flex="1" textAlign="center">
                 <Typography color={colors.grey[100]} fontSize={"2rem"}>
-                  {transaction.date}
+                  {transaction.time + " " + transaction.date}
                 </Typography>
               </Box>
               <Box flex="1" textAlign="center">
                 <Typography
                   color={
-                    transaction.status === "cancelled"
+                    transaction.status === "Cancelled"
                       ? "red"
+                      : transaction.status === "Checked-in"
+                      ? colors.blueAccent[500]
+                      : transaction.status === "Rated"
+                      ? "yellow"
+                      : transaction.status === "Pending Payment"
+                      ? "rgb(255, 219, 194)"
                       : colors.greenAccent[500]
                   }
                   fontSize={"2rem"}
