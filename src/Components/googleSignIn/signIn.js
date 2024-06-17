@@ -4,25 +4,11 @@ import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import Home from "../../view/partials/Home";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchSignInMethodsForEmail,
-  updateProfile,
-  sendEmailVerification,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import {
-  getDatabase,
-  ref,
-  set,
-  onValue,
-  get,
-  update,
-  child,
-} from "firebase/database";
-import useForceUpdate from "../../hooks/useForceUpdate";
-import ReCAPTCHA from "react-google-recaptcha";
+import { fetchSignInMethodsForEmail, updateProfile, sendEmailVerification, onAuthStateChanged  } from "firebase/auth";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getDatabase, ref, set, onValue, get, update } from "firebase/database";
+
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -36,118 +22,104 @@ function SignIn() {
   const [captchaError, setCaptchaError] = useState(null);
   const [signInMethod, setSignInMethod] = useState(null);
   const navigate = useNavigate();
-  const forceUpdate = useForceUpdate();
-  const [retry, setRetry] = useState(0);
-  const [isInactive, setIsInactive] = useState(false);
-  const inactivityTimeoutRef = useRef(null);
+
+    useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate("/"); // Redirect to home page if user is already logged in
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   function addDataBase(userId, email, name, role) {
     const db = getDatabase();
-    set(
-      ref(db, "users/" + userId),
-      {
-        email: email,
-        username: name,
-        role: role,
-        isVerified: false,
-      },
-      function (error) {
-        if (error) {
-          alert("Lỗi");
-        } else {
-          alert("Thành Công !!!");
-        }
+    set(ref(db, 'users/' + userId), {
+      email: email,
+      username: name,
+      role: role,
+      isVerified: false,
+    }, function (error) {
+      if (error) {
+        alert('Lỗi');
+      } else {
+        alert('Thành Công !!!');
       }
-    );
+    });
   }
 
-  const onChange = (value) => {
-    setIsCaptchaVerified(!!value);
-    setCaptchaError(null);
-  };
-  const onErrored = () => {
-    setCaptchaError("Failed to load reCAPTCHA. Please try again.");
-  };
 
-  const onExpired = () => {
-    setIsCaptchaVerified(false);
-    setCaptchaError("reCAPTCHA expired. Please verify again.");
-  };
 
   const handleGoogleLogin = async () => {
     try {
       const data = await signInWithPopup(auth, provider);
-      const user = data.user;
-
-      // Get the creation time from the user's metadata
-      const creationTime = user.metadata.creationTime;
-
-      const userEmail = user.email;
-      const userNamePart = userEmail.split("@")[0];
-      const userName = "gg" + userNamePart;
-      const userId = user.uid;
+      const userEmail = data.user.email;
+      const userNamePart = userEmail.split('@')[0];
+      const userName = 'gg' + userNamePart;
+      const userId = data.user.uid;
       const db = getDatabase();
-      const userRef = ref(db, `users/${userId}`);
-      let userRole = "user";
-
-      const userDataSnapshot = await get(userRef);
-      const userData = userDataSnapshot.exists()
-        ? userDataSnapshot.val()
-        : null;
-      let accountStatus = "enable";
-
-      // If user does not exist in the database, add the user
+      const userRef = ref(db, 'users/' + userId);
+      let userRole = 'user';
+      console.log('User Email:', userEmail);
+    console.log('Generated Username:', userName);
+    console.log('User ID:', userId);
+      // Kiểm tra và lấy dữ liệu người dùng từ Firebase
+      const userDataSnapshot = await new Promise((resolve) => {
+        onValue(userRef, (snapshot) => {
+          resolve(snapshot);
+        });
+      });
+      
+      const userData = userDataSnapshot.val();
+      console.log('User Data from Firebase:', userData);
+      // Nếu người dùng chưa tồn tại trong cơ sở dữ liệu, thêm người dùng
       if (!userData) {
         await set(userRef, {
           email: userEmail,
           username: userName,
           role: userRole,
           isVerified: true,
-          accountBalance: 0,
-          accountStatus: accountStatus,
-          creationTime: creationTime, // Add the creation time here
+          accountBalance: 0
         });
       } else {
-        userRole = userData.role || "user";
-        const accountBalance = userData.accountBalance || 0;
+        userRole = userData.role || 'user';
         await set(userRef, {
           ...userData,
-          email: userEmail,
-          username: userName,
-          role: userRole,
-          isVerified: true,
-          accountBalance: accountBalance,
-          accountStatus: userData.accountStatus || accountStatus,
-          creationTime: userData.creationTime || creationTime, // Add the creation time here
+          username: userName
         });
-
-        if (userData.accountBalance === undefined) {
-          await update(userRef, {
-            accountBalance: 0,
-          });
-        }
       }
-      setSignInMethod("google");
-      setIsCaptchaVerified(true);
-
-      toast.success("Login successfully. Wish you enjoy our best experience", {
-        autoClose: 2000,
-        onClose: () => {
-          switch (userRole) {
-            case "veterinarian":
-              navigate("/vet/dashboard");
-              break;
-            case "manager":
-              navigate("/manager");
-              break;
-            case "admin":
-              navigate("/admin/dashboard");
-              break;
-            default:
-              navigate("/");
-          }
-        },
+  
+      // Đọc dữ liệu thú cưng của người dùng từ Firebase sau khi đăng nhập thành công
+      const petRef = ref(db, "users/" + userId + "/pets");
+      const pets = await new Promise((resolve) => {
+        onValue(petRef, (snapshot) => {
+          const petData = snapshot.val();
+          resolve(petData ? Object.values(petData) : []);
+        });
       });
+  
+      // Lưu dữ liệu thú cưng vào state hoặc localStorage nếu cần
+      localStorage.setItem("pets", JSON.stringify(pets));
+  
+      // Điều hướng dựa trên vai trò của người dùng
+      switch (userRole) {
+        case 'user':
+          navigate("/");
+          break;
+        case 'veterinarian':
+          navigate("/veterinarian");
+          break;
+        case 'manager':
+          navigate("/manager");
+          break;
+        case 'admin':
+          navigate("/admin");
+          break;
+        default:
+          navigate("/");
+      }
+  
+      toast.success("Login successfully. Wish you enjoy our best experience");
     } catch (error) {
       console.error("Error during Google sign-in:", error);
       toast.error("Failed to sign in with Google. Please try again.", {
@@ -186,14 +158,11 @@ function SignIn() {
 
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
     if (signInMethods.length > 0) {
-      setIsRegistering(false);
-      toast.error("This email is used by another user, please try again!", {
-        autoClose: 2000,
-        onClose: () => {
-          forceUpdate();
-        },
-      });
-      return;
+      setIsRegistering(false); // Allow user to edit registration info
+      toast.error(
+        "This email is used by another user, please try again!"
+      );
+      return; // Prevent form submission
     }
 
     if (!isRegistering) {
@@ -210,21 +179,12 @@ function SignIn() {
           displayName: username,
           role: "user",
           isVerified: false,
-          accountBalance: 0,
-        });
-        addDataBase(userId, email, username, "user");
-        await auth.signOut();
-        toast.success(
-          "Registration successful. Please check your email for verification then login to our system again.",
-          {
-            autoClose: 2000,
-            onClose: () => {
-              setTimeout(() => {
-                forceUpdate();
-              }, 2000);
-            },
-          }
-        );
+          accountBalance: 0
+        }); 
+        addDataBase(userId, email, username, "user", ); // Omit password from user data
+        // window.location.reload();
+        navigate("/"); // Redirect to home page
+        toast.success("Registration successful. Please check your email for verification then login to our system again.");
       } catch (error) {
         toast.error("This email is used by another user, please try again!", {
           autoClose: 2000,
@@ -252,16 +212,15 @@ function SignIn() {
   };
 
   const handleEmailLogin = async (event) => {
-    event.preventDefault();
-    setError(null);
-  
-    if (!isCaptchaVerified) {
-      toast.error("Please complete the captcha before submitting the form.");
-      return;
-    }
+    event.preventDefault(); // Ngăn hành vi mặc định của biểu mẫu
+    setError(null); // Xóa các lỗi trước đó
   
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
   
       if (!user.emailVerified) {
@@ -280,21 +239,18 @@ function SignIn() {
       localStorage.setItem("email", userEmail);
       const userId = user.uid;
       const db = getDatabase();
-      const userRef = ref(db, `users/${userId}`);
-      let userRole = "user";
-      const creationTime = user.metadata.creationTime;
+      const userRef = ref(db, 'users/' + userId);
+      let userRole = 'user';
   
-      const creationTimeSnapshot = await get(child(userRef, "creationTime"));
-      if (!creationTimeSnapshot.exists()) {
-        await set(child(userRef, "creationTime"), creationTime);
-      }
+      // Kiểm tra và lấy dữ liệu người dùng từ Firebase
+      const userDataSnapshot = await new Promise((resolve) => {
+        onValue(userRef, (snapshot) => {
+          resolve(snapshot);
+        }, { onlyOnce: true });
+      });
   
-      let accountStatus = "enable";
-  
-      const userDataSnapshot = await get(userRef);
-      const userData = userDataSnapshot.exists()
-        ? userDataSnapshot.val()
-        : null;
+      const userData = userDataSnapshot.val();
+      console.log('User Data from Firebase:', userData);
   
       if (!userData) {
         await set(userRef, {
@@ -302,11 +258,11 @@ function SignIn() {
           username: user.displayName || "User",
           role: userRole,
           isVerified: true,
-          accountBalance: 0,
-          accountStatus: accountStatus,
+          accountBalance: 0 // Thiết lập accountBalance mặc định là 0 nếu người dùng không tồn tại
         });
       } else {
-        userRole = userData.role || "user";
+        userRole = userData.role || 'user';
+        // Chỉ cập nhật accountBalance nếu nó chưa tồn tại
         if (userData.accountBalance === undefined) {
           await update(userRef, {
             accountBalance: 0,
@@ -316,37 +272,40 @@ function SignIn() {
         await update(userRef, {
           username: user.displayName || "User",
           role: userRole,
-          isVerified: userData.isVerified,
-          accountStatus: userData.accountStatus || accountStatus,
+          isVerified: userData.isVerified
         });
       }
   
-      toast.success("Login successfully. Wish you enjoy our best experience!", {
-        autoClose: 2000,
-        onClose: () => {
-          switch (userRole) {
-            case "veterinarian":
-              navigate("/vet/dashboard");
-              break;
-            case "manager":
-              navigate("/manager");
-              break;
-            case "admin":
-              navigate("/admin/dashboard");
-              break;
-            default:
-              navigate("/");
-          }
-        },
+      const petRef = ref(db, "users/" + userId + "/pets");
+      const pets = await new Promise((resolve) => {
+        onValue(petRef, (snapshot) => {
+          const petData = snapshot.val();
+          resolve(petData ? Object.values(petData) : []);
+        }, { onlyOnce: true });
       });
+  
+      // Lưu dữ liệu thú cưng vào state hoặc localStorage nếu cần
+      localStorage.setItem("pets", JSON.stringify(pets));
+  
+      switch (userRole) {
+        case 'user':
+          navigate("/");
+          break;
+        case 'veterinarian':
+          navigate("/veterinarian");
+          break;
+        case 'manager':
+          navigate("/manager");
+          break;
+        case 'admin':
+          navigate("/admin");
+          break;
+        default:
+          navigate("/");
+      }
+      toast.success("Login successfully. Wish you enjoy our best experience");
     } catch (error) {
-      console.error("Error during login:", error);
-      toast.error("Failed to login. Please check your email and password.", {
-        autoClose: 2000,
-        onClose: () => {
-          forceUpdate();
-        },
-      });
+      toast.error("Something went wrong. Please check your email or password and try again!");
     }
   };
 
@@ -402,34 +361,32 @@ function SignIn() {
 
   return (
     <div>
-      {!userEmail && (
-        <div className="signIn" style={{ height: "100vh" }}>
+      {!userEmail && ( // Only show login options if not logged in
+        <>
           <div className="container form" id="container">
             <div className="form-container sign-up">
               <form onSubmit={onSubmit}>
                 <h1>Create Account</h1>
                 <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>
-                    Login with Google
-                  </button>
+                  <button type="button" onClick={handleGoogleLogin}>Login with Google</button>
                 </div>
                 <span>or use your email for registeration</span>
                 <input
-                  id="email"
+                id="email"
                   type="email"
                   autoComplete="off"
                   required
                   value={email}
-                  placeholder="Input your email"
+                  placeholder ="Input your email"
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
                   className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
                 />
                 <input
-                  id="password"
+                id="password"
                   disabled={isRegistering}
-                  placeholder="Input your password"
+                  placeholder ="Input your password"
                   type="password"
                   autoComplete="off"
                   required
@@ -437,7 +394,7 @@ function SignIn() {
                   onChange={(e) => {
                     setPassword(e.target.value);
                   }}
-                  className="mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                  className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
                 />
                 <div>
                   <label className="text-sm text-gray-600 font-bold">
@@ -446,7 +403,7 @@ function SignIn() {
                   <input
                     disabled={isRegistering}
                     type="password"
-                    placeholder="Confirm your password"
+                  placeholder ="Confirm your password"
                     autoComplete="off"
                     required
                     value={confirmPassword}
@@ -459,7 +416,7 @@ function SignIn() {
                 <button
                   type="submit"
                   disabled={isRegistering}
-                  className={`px-4 py-2 text-white font-medium rounded-lg ${
+                  className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
                     isRegistering
                       ? "bg-gray-300 cursor-not-allowed"
                       : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300"
@@ -469,27 +426,26 @@ function SignIn() {
                 </button>
               </form>
             </div>
-            <div className="form-container sign-in">
+            <div class="form-container sign-in">
               <form onSubmit={handleEmailLogin}>
                 <h1>Sign In</h1>
                 <div className="social-icons">
-                  <button type="button" onClick={handleGoogleLogin}>
-                    Login with Google
-                  </button>
+                  <button type="button" onClick={handleGoogleLogin}>Login with Google</button>
                 </div>
                 <span>or use your email password</span>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  placeholder="Input your email"
+                  placeholder ="Input your email"
                   value={email}
                   onChange={handleChange}
                   required
                 />
                 <input
                   type="password"
-                  placeholder="Input your password"
+                  placeholder ="Input your password"
+
                   id="password"
                   name="password"
                   value={password}
@@ -497,23 +453,7 @@ function SignIn() {
                   required
                 />
                 <a href="/reset">Forget Your Password?</a>
-
-                {!isInactive && (
-                  <ReCAPTCHA
-                    key={retry} // This forces re-rendering of the component on retry
-                    sitekey="6LfjlPcpAAAAAPLRaxVhKzYI4OYR2mBW_wv6LZwW"
-                    onChange={onChange}
-                    onErrored={onErrored}
-                    onExpired={onExpired}
-                  />
-                )}
-                {captchaError && (
-                  <div style={{ color: "red" }}>
-                    {captchaError}
-                    {isInactive && <button onClick={handleRetry}>Retry</button>}
-                  </div>
-                )}
-                <button disabled={!isCaptchaVerified}>Sign In</button>
+                <button>Sign In</button>
               </form>
             </div>
             <div className="toggle-container">

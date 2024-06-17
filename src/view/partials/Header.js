@@ -15,10 +15,7 @@ function Header({ user, currentPath }) {
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
   const [isVerified, setIsVerified] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const location = useLocation();
-  const [role, setRole] = useState("");
-
+  const [headerVisible, setHeaderVisible] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -78,12 +75,7 @@ function Header({ user, currentPath }) {
 
       onValue(userRef, (snapshot) => {
         const data = snapshot.val();
-        if (data && data.role) {
-          setRole(data.role);
-        } else {
-          setRole("user");
-        }
-
+        console.log(data.bookings)
         if (data) {
           setUsername(data.username);
           setFullname(data.fullname);
@@ -93,6 +85,24 @@ function Header({ user, currentPath }) {
       });
     } else {
       setHeaderVisible(true); // Ensure header is visible even if user is not logged in
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+console.log(user)
+      // Convert creationTime to Date object
+      const creationTime = new Date(user.metadata.creationTime);
+      const targetDate = new Date("2024-05-27T00:00:00Z");
+
+      // Check if the user is new
+      if (creationTime >= targetDate) {
+        setIsNewUser(true);
+        console.log("This user is a new user.");
+      } else {
+        setIsNewUser(false);
+        console.log("This user is not a new user.");
+      }
     }
   }, [user]);
 
@@ -151,17 +161,8 @@ function Header({ user, currentPath }) {
     toggleDropdown();
     navigate("/manager");
   };
-  const vetDashboard = () => {
-    toggleDropdown();
-    navigate("/vet/dashboard");
-  };
-  const shouldShowHeader =
-    !location.pathname.startsWith("/admin") &&
-    !location.pathname.startsWith("/manager") &&
-    !location.pathname.startsWith("/vet") &&
-    !location.pathname.startsWith("/booking-details") &&
-    !location.pathname.startsWith("/rate-booking");
-    
+
+  const shouldShowHeader = !currentPath.startsWith("/admin") && currentPath !== "/manager" && currentPath !== "/veterinary";
 
   if (!shouldShowHeader) {
     return null; // Don't render the header if it's a login or admin page
@@ -202,30 +203,21 @@ function Header({ user, currentPath }) {
         >
           Contact
         </a>
-        {user && isVerified ? (
-          <div className="dropdown" ref={dropdownRef}>
-            <span onClick={toggleDropdown} className="username">
-            <FontAwesomeIcon className="icon" icon={faUser} />
-              {fullname || user.displayName || username}
-            </span>
-            <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
-              <div onClick={updateAccount}>Account</div>
-              <div onClick={pet}>Pet</div>
-              <div onClick={booking}>Booking</div>
-              {role === "admin" && (
-                <div onClick={adminDashboard}>Admin Dashboard</div>
-              )}
-              {role === "manager" && (
-                <div onClick={managerDashboard}>Manager Dashboard</div>
-              )}
-              {role === "veterinarian" && (
-                <div onClick={vetDashboard}>Vet Dashboard</div>
-              )}
-              <div onClick={logout}>Logout</div>
+        {shouldShowHeader && (
+          user && isVerified ? (
+            <div className="dropdown" ref={dropdownRef}>
+              <span onClick={toggleDropdown} className="username">
+                {user.displayName || username || fullname}
+              </span>
+              <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
+                <div onClick={updateAccount}>Account</div>
+                <div onClick={pet}>Pet</div>
+                <div onClick={logout}>Logout</div>
+              </div>
             </div>
-            </div>
-        ) : (
-          <button onClick={login}>Login</button>
+          ) : (
+            <button onClick={login}>Login</button>
+          )
         )}
       </nav>
     </header>

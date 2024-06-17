@@ -1,13 +1,12 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getDatabase, ref, get, update, onValue, set } from "firebase/database";
-import { auth } from "../../Components/firebase/firebase";
-import { TransactionContext } from "../../Components/context/TransactionContext";
-import { ToastContainer, toast } from "react-toastify";
-import { ScaleLoader } from "react-spinners";
-import { css } from "@emotion/react";
-import useForceUpdate from "../../hooks/useForceUpdate";
-import { BookingContext } from "../../Components/context/BookingContext";
+import React, { useEffect, useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getDatabase, ref, get, update } from 'firebase/database';
+import { auth } from '../../Components/firebase/firebase';
+import { TransactionContext } from '../../Components/context/TransactionContext';
+import { ToastContainer, toast } from 'react-toastify';
+import { ScaleLoader } from "react-spinners"; // Import the spinner you want to use
+import { css } from "@emotion/react"; 
+import { updateProfile } from "firebase/auth";
 
 const QrCodePage = () => {
   const { selectedPet, selectedServices, selectedDateTime } =
@@ -31,16 +30,8 @@ const QrCodePage = () => {
 
   const mockFetchTransactions = async () => {
     return {
-      descriptions: [
-        "thanhtoan BK1243463456",
-        "thanhtoan BK12315234",
-        "thanhtoan BK12315234",
-        "thanhtoan BK12315234",
-        "thanhtoan " + bookingId,
-        "thanhtoan BK12315234",
-        "thanhtoan BK12315234",
-      ],
-      amounts: [0, 1000, 100, 100, 30000, 500, 50000, 120000],
+      descriptions: ["thanhtoan BK1243463456","thanhtoan BK12315234","thanhtoan BK12315234","thanhtoan BK12315234", "thanhtoan " + bookingId, "thanhtoan BK12315234", "thanhtoan BK12315234"],
+      amounts: [0, 1000, 100, 100, 120000, 500, 50000, 120000] 
     };
   };
 
@@ -114,64 +105,11 @@ const QrCodePage = () => {
 
           if (newAccountBalance >= 0) {
             await update(userRef, { accountBalance: newAccountBalance });
-            const bookingRef = ref(db, `users/${user.uid}/bookings`);
-            onValue(bookingRef, (snapshot) => {
-              const bookings = snapshot.val();
-              if (bookings) {
-                const bookingKey = Object.keys(bookings).find(
-                  (key) => bookings[key].bookingId === bookingId
-                );
-                if (bookingKey) {
-                  const specificBookingRef = ref(
-                    db,
-                    `users/${user.uid}/bookings/${bookingKey}`
-                  );
-                  update(specificBookingRef, { status: "Paid" });
-                }
-              }
-            });
-
-            const bookingSlotRef = ref(
-              db,
-              `users/${selectedDateTime.vet.uid}/schedule/${selectedDateTime.date}`
-            );
-            const bookingSlotSnapshot = await get(bookingSlotRef);
-            let bookedSlots = Array.isArray(bookingSlotSnapshot.val())
-              ? bookingSlotSnapshot.val()
-              : [];
-
-            bookedSlots.push({
-              time: selectedDateTime.time,
-              petName: selectedPet.name,
-              services: selectedServices.map((service) => service.name),
-              userAccount: user.email,
-              username: username,
-              status: 1,
-              bookingId: bookingId
-            });
-
-            await set(
-              ref(
-                db,
-                `users/${selectedDateTime.vet.uid}/schedule/${selectedDateTime.date}`
-              ),
-              bookedSlots
-            );
-
             toast.success(
-              "Payment successfully! Please your check booking section.",
-              {
-                autoClose: 2000,
-                onClose: () => {
-                  setTimeout(() => {
-                    forceUpdate();
-                    navigate("/manage-booking");
-                    window.location.reload()
-                  }, 500);
-                },
-              }
+              'Payment success! Please check your booking section to track your booking information'
             );
             clearInterval(intervalId);
+            navigate('/');
           }
         } else {
           console.log("Payment not found in transaction history");

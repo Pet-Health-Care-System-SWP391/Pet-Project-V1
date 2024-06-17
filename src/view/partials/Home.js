@@ -1,99 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { auth } from "../../Components/firebase/firebase"; // Assuming you have a firebase config file
 import { useNavigate } from "react-router-dom";
-import Typed from "typed.js"; // Import Typed.js directly
-import { ToastContainer, toast } from "react-toastify";
-import emailjs from "emailjs-com";
-import ScrollReveal from "scrollreveal";
-import { faPaw } from "@fortawesome/free-solid-svg-icons";
-import Aos from "aos";
-import "aos/dist/aos.css";
-import "react-toastify/dist/ReactToastify.css";
-import {
-  faFacebook,
-  faInstagram,
-  faTiktok,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useForceUpdate from "../../hooks/useForceUpdate";
-import { getDatabase, get, ref } from "firebase/database";
-import Box from "@mui/material/Box";
-import Rating from "@mui/material/Rating";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-// import Swiper and modules styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import useViewport from "../../hooks/useViewport";
-
+import {Typed} from "react-typed";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import emailjs from 'emailjs-com';
 
 function Home() {
   const typedElement = useRef(null);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const form = useRef();
-  const [userName, setUserName] = useState("");
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 6;
-  const [backgroundImage, setBackgroundImage] = useState("");
-  const forceUpdate = useForceUpdate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [bookedSlots, setBookedSlots] = useState([]);
-  const { width } = useViewport(); // Get the viewport width
-  const [slidesPerView, setSlidesPerView] = useState(4);
-  const [loop, setLoop] = useState(true);
-  const [initialized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    if (width >= 1785) {
-      setSlidesPerView(4);
-    } else if (width >= 991 && width < 1600) {
-      setSlidesPerView(3);
-    } else if (width >= 600 && width < 991) {
-      setSlidesPerView(2);
-    } else {
-      setSlidesPerView(1);
-    }
-  }, [width]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [totalSlides]);
-
-  useEffect(() => {
-    const currentImage = document.querySelector(
-      `.list-images .slide:nth-child(${currentSlide + 1}) img`
-    );
-    if (currentImage) {
-      setBackgroundImage(currentImage.src);
-    }
-  }, [currentSlide]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
-  };
-
-  const currentSlideHandler = (n) => {
-    setCurrentSlide(n - 1);
-  };
-
-  useEffect(() => {
-    Aos.init({
-      duration: 1000,
-      easing: "ease",
-      once: true,
-    });
-  }, []);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -124,34 +44,15 @@ function Home() {
   const sendEmail = (e) => {
     e.preventDefault();
     const formData = new FormData(form.current);
-    formData.append("to_name", userName);
-    emailjs
-      .sendForm(
-        "service_9sprp0p",
-        "template_pz8ey59",
-        form.current,
-        "gWym0COHJFeyRWp5M"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          toast.success("Email sent successfully!", {
-            autoClose: 2000,
-            onClose: () => {
-              forceUpdate();
-            },
-          });
-        },
-        (error) => {
-          console.log(error.text);
-          toast.error("Failed to send email.", {
-            autoClose: 2000,
-            onClose: () => {
-              forceUpdate();
-            },
-          });
-        }
-      );
+    formData.append('to_name', userName);
+    emailjs.sendForm('service_9sprp0p', 'template_pz8ey59', form.current, 'gWym0COHJFeyRWp5M')
+      .then((result) => {
+        console.log(result.text);
+        toast.success("Email sent successfully!");
+      }, (error) => {
+        console.log(error.text);
+        toast.error("Failed to send email.");
+      });
 
     e.target.reset();
   };
@@ -317,13 +218,8 @@ function Home() {
           </div>
           <div className="home-img">
             <img
-              src="https://static.wixstatic.com/media/84770f_cc7fbf222d044cf09028f921a0cfe36e~mv2.png/v1/crop/x_0,y_0,w_5002,h_3009/fill/w_1163,h_699,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/shutterstock_184908566%20copy.png"
-              alt=""
-              width="2400"
-              height="559"
-              srcSet="https://static.wixstatic.com/media/84770f_cc7fbf222d044cf09028f921a0cfe36e~mv2.png/v1/crop/x_0,y_0,w_5002,h_3009/fill/w_1163,h_699,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/shutterstock_184908566%20copy.png"
-              fetchpriority="high"
-            ></img>
+              src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/440942530_423620990437817_5689570377664203254_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=BFrjCE_IQ8AQ7kNvgHNUkAr&_nc_ht=scontent.fsgn2-6.fna&oh=00_AYAE-6ge9dx5ooH4pzNnSfurgsz5i8tv1ymwOloTS8-CyQ&oe=66576FD2"
+            />
           </div>
         </section>
       </div>
@@ -549,150 +445,32 @@ function Home() {
         </div>
       </section>
       <section className="contact" id="contact">
-        <div className="question">
-          <img
-            src="https://static.wixstatic.com/media/84770f_346b425b1fe54554a98a4425fa8333cb~mv2_d_3760_3760_s_4_2.jpg/v1/fill/w_599,h_599,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/84770f_346b425b1fe54554a98a4425fa8333cb~mv2_d_3760_3760_s_4_2.jpg"
-            alt=""
-            className="round-image"
-            style={{
-              width: "179px",
-              height: "178px",
-              objectFit: "fill",
-              marginLeft: "-200px",
-            }}
-            width="479"
-            height="478"
-            srcSet="https://static.wixstatic.com/media/84770f_346b425b1fe54554a98a4425fa8333cb~mv2_d_3760_3760_s_4_2.jpg/v1/fill/w_599,h_599,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/84770f_346b425b1fe54554a98a4425fa8333cb~mv2_d_3760_3760_s_4_2.jpg"
-            fetchpriority="high"
-          />
-          <div className="quick-question" data-aos="flip-left">
-            <p className="quick-question1">
-              1. Has your pet had problems with eating recently?
-            </p>
-            <p className="quick-answer1">
-              Yes, my pets have changed their food intake, they don't eat it all
-              like before.
-            </p>
-            <p className="quick-question2">
-              2. Does the pet show any abnormalities in behavior or health?
-            </p>
-            <p className="quick-answer1">
-              Yes, my pet has been vomiting and showing signs of fatigue for the
-              past few days.
-            </p>
-            <p className="quick-question3">
-              3. Has your pet had any problems recently?{" "}
-            </p>
-            <p className="quick-answer1">
-              No, my pet has not had any problems recently.
-            </p>
+        <h2 className="heading">
+          Contact <span>Us!</span>
+        </h2>
+        <form ref={form} onSubmit={sendEmail}>
+          <div className="input-box">
+            <input type="text" name="from_name" placeholder="Full Name" required />
+            <input type="email" name="from_email" placeholder="Email Address" required />
           </div>
-          <img
-            className="image-70"
-            src="https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2).png"
-            alt="Petotum"
-            style={{
-              opacity: 1,
-              transform:
-                "translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)",
-              transformStyle: "preserve-3d",
-            }}
-            sizes="(max-width: 479px) 100vw, (max-width: 767px) 83vw, (max-width: 991px) 85vw, (max-width: 1600px) 45vw, 1000px"
-            data-w-id="abefafda-0c43-e7a4-fa4b-7ff2c7fd5cc9"
-            loading="lazy"
-            srcSet="https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2)-p-500.png 500w, https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2)-p-800.png 800w, https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2)-p-1080.png 1080w, https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2)-p-1600.png 1600w, https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2)-p-2000.png 2000w, https://cdn.prod.website-files.com/6139cf517cd6d26ff1548b86/6353420dafc1661ee0ee3b4e_pet%20insurance%20(2).png 2880w"
-          />
-        </div>
-        <div className="form-contact" data-aos="flip-right">
-          <h2 className="heading">
-            Contact <span className="us">Us!</span>
-          </h2>
-          <form ref={form} onSubmit={sendEmail}>
-            <div className="input-box">
-              <input
-                type="text"
-                name="from_name"
-                placeholder="Full Name"
-                required
-              />
-              <input
-                type="email"
-                name="from_email"
-                placeholder="Email Address"
-                required
-              />
-            </div>
-            <div className="input-box">
-              <input
-                type="number"
-                name="from_phone"
-                placeholder="Mobile Number"
-                required
-              />
-              <input
-                type="text"
-                name="subject"
-                placeholder="Your Address"
-                required
-              />
-            </div>
-            <textarea
-              name="message"
-              cols="30"
-              rows="10"
-              placeholder="Your Message"
-              required
-            ></textarea>
-            <input type="submit" value="Send Message" className="btn" />
-          </form>
-        </div>
+          <div className="input-box">
+            <input type="number" name="from_phone" placeholder="Mobile Number" required />
+            <input type="text" name="subject" placeholder="Your Address" required />
+          </div>
+          <textarea name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+          <input type="submit" value="Send Message" className="btn" />
+        </form>
       </section>
+
+      {/* footer design */}
       <footer className="footer">
-        <div className="footer-container">
-          <div className="footer-section">
-            <a
-              href="#home"
-              onClick={homePage}
-              className="logo"
-              style={{ textDecoration: "none", color: "#7b2cbf" }}
-            >
-              <FontAwesomeIcon icon={faPaw} /> Pet Center
-            </a>
-            <div className="footer-info">
-              <p>Address: Nha Van Hoa Sinh Vien Lang Dai Hoc Thu Duc</p>
-              <p>Hotline: 0762 029 029</p>
-              <p>Email: xxxxx@hotmail.com</p>
-            </div>
-            <div className="footer-title">
-              Continuously improve service quality and level of expertise
-              Bringing customers the most perfect services...
-            </div>
-            <div className="footer-social">
-              <a href="#" className="social-icon">
-                <FontAwesomeIcon icon={faFacebook} />
-              </a>
-              <a href="#" className="social-icon">
-                <FontAwesomeIcon icon={faTiktok} />
-              </a>
-              <a href="#" className="social-icon">
-                <FontAwesomeIcon icon={faYoutube} />
-              </a>
-              <a href="#" className="social-icon">
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-            </div>
-          </div>
-          <div className="footer-section footer-map">
-            <h3>Bản Đồ</h3>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.1640561676095!2d106.79814847609639!3d10.875123789279707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d8a6b19d6763%3A0x143c54525028b2e!2zTmjDoCBWxINuIGjDs2EgU2luaCB2acOqbiBUUC5IQ00!5e0!3m2!1svi!2s!4v1715862724373!5m2!1svi!2s"
-              width="400"
-              height="350"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
+        <div className="footer-text">
+          <p>Copyright &copy; 2024 by NJS1804 - Team3 | All Rights Reserved.</p>
+        </div>
+        <div className="footer-iconTop" style={{fontSize: "2rem"}}>
+          <a style={{padding: "1rem 1.2rem", borderRadius: "50%", display: "inline-flex"
+    ,justifyContent: "center"
+    ,alignItems: "center", color: "#fff"}} href="#home"><FontAwesomeIcon icon={faArrowUp} /></a>
         </div>
       </footer>
     </div>
