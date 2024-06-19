@@ -167,10 +167,9 @@ const Dashboard = () => {
 
     updateRevenue();
 
-    const intervalId = setInterval(updateRevenue, 15000); 
-
-    return () => clearInterval(intervalId);
-  }, [isCustomDateSelected, selectedDate]);
+    const intervalId = setInterval(updateRevenue, 60);
+return () => clearInterval(intervalId);
+  }, [isCustomDateSelected]);
 
   useEffect(() => {
     if (selectedDate) {

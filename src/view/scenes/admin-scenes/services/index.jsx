@@ -17,7 +17,7 @@ const Services = () => {
   const addService = (service) => {
     const newServiceRef = ref(db, 'services/' + service.name);
     return set(newServiceRef, service);
-  }; 
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

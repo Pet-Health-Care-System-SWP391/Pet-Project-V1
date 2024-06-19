@@ -66,19 +66,10 @@ function Team() {
     return re.test(String(email).toLowerCase());
   };
 
-  const validatePhone = (phone) => {
-    const re = /^\d{10}$/; // Only allow 10 digits
-    return re.test(phone);
-  };
-
   const checkDuplicateData = (row) => {
     return rows.some((item) => {
       if (item.id !== row.id) {
-        return (
-          item.email === row.email ||
-          item.phone === row.phone ||
-          item.username === row.username
-        );
+        return item.email === row.email || item.username === row.username;
       }
       return false;
     });
@@ -121,9 +112,9 @@ function Team() {
     }
 
     if (isValid && Object.keys(updates).length > 0) {
-      const isDuplicateEmailUsernamePhone = checkDuplicateData(row);
-      if (isDuplicateEmailUsernamePhone) {
-        toast.error("Email, username or phone number are duplicated !!!");
+      const isDuplicateEmailUsername = checkDuplicateData(row);
+      if (isDuplicateEmailUsername) {
+        toast.error("Email, username are duplicated !!!");
         setLoading(false);
         return;
       }
