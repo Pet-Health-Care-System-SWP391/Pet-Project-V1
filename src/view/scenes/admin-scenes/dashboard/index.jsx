@@ -9,7 +9,6 @@ import LineChart from "../../../../Components/dashboardChart/LineChart";
 import BarChart from "../../../../Components/dashboardChart/BarChart";
 import StatBox from "../../../../Components/dashboardChart/StatBox";
 import PieChart from "../../../../Components/dashboardChart/PieChart";
-
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -93,9 +92,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     const updateRevenue = () => {
-      if (isCustomDateSelected) return;
-
       const currentDate = getCurrentDate();
+      console.log(isCustomDateSelected);
+      if (isCustomDateSelected && selectedDate !== currentDate) {
+        const totalPaidForSelectedDate = getTotalPaid(selectedDate, "date");
+        setDailyRevenue(totalPaidForSelectedDate.toLocaleString() + ",000");
+        return;
+      }
+
       const previousDay = getPreviousDay();
       const previousMonth = getPreviousMonth();
       const previousYear = getPreviousYear();
@@ -163,16 +167,18 @@ const Dashboard = () => {
 
     updateRevenue();
 
-    const intervalId = setInterval(updateRevenue, 60);
+    const intervalId = setInterval(updateRevenue, 15000); 
 
     return () => clearInterval(intervalId);
-  }, [isCustomDateSelected]);
+  }, [isCustomDateSelected, selectedDate]);
 
   useEffect(() => {
     if (selectedDate) {
-      const totalPaidForSelectedDate = getTotalPaid(selectedDate, "date");
-      setDailyRevenue(totalPaidForSelectedDate.toLocaleString() + ",000");
-      setIsCustomDateSelected(true);
+      if (selectedDate === getCurrentDate()) {
+        setIsCustomDateSelected(false);
+      } else {
+        setIsCustomDateSelected(true);
+      }
     } else {
       setIsCustomDateSelected(false);
     }

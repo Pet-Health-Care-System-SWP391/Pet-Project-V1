@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookingContext } from "../../Components/context/BookingContext";
-import { getDatabase, ref, get, child, set, update } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-
 
 const generateTimeSlots = (startTime, endTime, interval) => {
   const slots = [];
@@ -58,7 +57,7 @@ const SelectDateTime = () => {
           uid,
           name: vetsData[uid].fullname,
           schedule: vetsData[uid].schedule || {},
-          specialization: vetsData[uid].specialization
+          specialization: vetsData[uid].specialization,
         }));
       setVets(vetsList);
     };
@@ -73,7 +72,6 @@ const SelectDateTime = () => {
       const snapshot = await get(usersRef);
       const usersData = snapshot.val();
       let allBookings = [];
-      console.log("Users Data:", usersData); // Log to check usersData
 
       if (usersData) {
         Object.keys(usersData).forEach((userId) => {
@@ -90,22 +88,18 @@ const SelectDateTime = () => {
           }
         });
       }
-      console.log("All Bookings:", allBookings); // Log to check allBookings
       setBookedSlots(allBookings);
     };
 
     fetchAllBookings();
   }, []);
 
-  useEffect(() => {
-    console.log("Booked Slots:", bookedSlots);
-  }, [date, vet, bookedSlots]);
-
   const morningSlots = generateTimeSlots(600, 720, 15); // 10:00 AM to 11:45 AM
   const afternoonSlots = generateTimeSlots(720, 1080, 15); // 12:00 PM to 4:45 PM
 
   const availableVets = date ? vets.filter((vet) => vet.schedule[date]) : [];
-vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
+  vets.forEach((vet) => console.log("Vet Schedule:", vet.schedule));
+
   const handleNext = async () => {
     if (date && vet && selectedTime) {
       const selectedVet = vets.find((v) => v.name === vet);
@@ -126,7 +120,11 @@ vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
           time: selectedTime,
         };
         setBookedSlots([...bookedSlots, newBookedSlot]);
-        setSelectedDateTime({ date, time: selectedTime, vet: { name: vet, uid: selectedVet.uid } });
+        setSelectedDateTime({
+          date,
+          time: selectedTime,
+          vet: { name: vet, uid: selectedVet.uid },
+        });
         navigate("/book/booking-confirm");
       } catch (error) {
         console.error("Error processing booking:", error);
@@ -136,46 +134,62 @@ vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
       alert("Please select a date, vet, and time.");
     }
   };
-  console.log(availableVets)
+
+  console.log(availableVets);
 
   const tileDisabled = ({ date }) => {
     const today = new Date();
     return date < today.setHours(0, 0, 0, 0);
   };
+
   const handleDateChange = (selectedDate) => {
     const year = selectedDate.getFullYear();
-    const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0 nên cần cộng thêm 1
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
     const day = String(selectedDate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
-  }
-  
+  };
+
   const renderTimeSlots = (slots) => {
-    return slots.map((slot, index) => {
+    const currentTime = new Date();
+    const currentDay = currentTime.getDate();
+    const currentMinutes =
+      currentTime.getHours() * 60 + currentTime.getMinutes();
+    const cutoffTime = currentMinutes + 30;
+
+    return slots.map((slot) => {
+      const [slotHours, slotMinutes] = slot.timeString.split(":").map(Number);
+      const slotTime = slotHours * 60 + slotMinutes;
+      const isPast =
+        currentDay === Number(date.split("-")[2]) && slotTime <= cutoffTime;
+
       const isBooked = bookedSlots.some(
         (bookedSlot) =>
           bookedSlot.vet.name === vet &&
           bookedSlot.date === date &&
           bookedSlot.time === slot.timeString &&
-          (bookedSlot.status === "Paid" || bookedSlot.status === "Checked-in" || bookedSlot.status === "Rated" )
+          (bookedSlot.status === "Paid" ||
+            bookedSlot.status === "Checked-in" ||
+            bookedSlot.status === "Rated")
       );
-  
-      console.log(`Slot: ${slot.timeString}, Is Booked: ${isBooked}`);
-  
+
+      console.log(
+        `Slot: ${slot.timeString}, Is Booked: ${isBooked}, Is Past: ${isPast}`
+      );
+
       return (
         <button
           key={slot.timeString}
           onClick={() => setSelectedTime(slot.timeString)}
           className={selectedTime === slot.timeString ? "selected" : ""}
-          style={{ margin: "5px", width: "120px" }} // Adjust width to fit 4 buttons in a row
-          disabled={isBooked}
+          style={{ margin: "5px", width: "120px" }}
+          disabled={isBooked || isPast}
         >
           {slot.formattedTime}
         </button>
       );
     });
   };
-  
 
   if (!selectedPet || selectedServices.length === 0) {
     return (
@@ -195,7 +209,10 @@ vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
     <div className="date-time-container">
       <div className="date-time-selection">
         <div className="form-column">
-          <h1>Select Date and Time for <span className='service-pet-name'>{selectedPet.name}</span></h1>
+          <h1>
+            Select Date and Time for{" "}
+            <span className="service-pet-name">{selectedPet.name}</span>
+          </h1>
           <div className="sel-date-form-group">
             <label>Date:</label>
             <Calendar
@@ -205,22 +222,20 @@ vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
             />
           </div>
           <div className="sel-date-form-group">
-          <label htmlFor="vet">Vet:</label>
-          <select
-            id="vet"
-            value={vet}
-            onChange={(e) => setVet(e.target.value)}
-            required
-          >
-            <option value="">Select a Vet</option>
-            {availableVets.map((vet) => (
-              <option key={vet.uid} value={vet.name}>
-                {vet.name}   -  {vet.specialization
-
-                }
-              </option>
-            ))}
-          </select>
+            <label htmlFor="vet">Vet:</label>
+            <select
+              id="vet"
+              value={vet}
+              onChange={(e) => setVet(e.target.value)}
+              required
+            >
+              <option value="">Select a Vet</option>
+              {availableVets.map((vet) => (
+                <option key={vet.uid} value={vet.name}>
+                  {vet.name} - {vet.specialization}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="slots-column">
@@ -257,18 +272,21 @@ vets.forEach(vet => console.log('Vet Schedule:', vet.schedule));
                   </div>
                 </div>
               </div>
-              <button className="back-button" onClick={() => navigate(-1)}>  <FontAwesomeIcon className='icon-left' icon={faCaretLeft} /> BACK</button>
+              <button className="back-button" onClick={() => navigate(-1)}>
+                <FontAwesomeIcon className="icon-left" icon={faCaretLeft} />{" "}
+                BACK
+              </button>
               <button
-               className='button-service button-service1'
+                className="button-service button-service1"
                 onClick={handleNext}
                 disabled={!date || !vet || !selectedTime}
               >
-                NEXT     <FontAwesomeIcon className='icon-right' icon={faCaretRight} />
+                NEXT{" "}
+                <FontAwesomeIcon className="icon-right" icon={faCaretRight} />
               </button>
             </>
           )}
         </div>
-         
       </div>
     </div>
   );

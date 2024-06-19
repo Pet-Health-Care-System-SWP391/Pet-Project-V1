@@ -107,8 +107,8 @@ function Team() {
       updates.accountBalance = row.accountBalance;
       localStorage.setItem("accountBalance", row.accountBalance);
     }
-    if (row.phone){
-        updates.phone = row.phone;
+    if (row.phone) {
+      updates.phone = row.phone;
     }
     if (row.role) {
       updates.role = row.role;
@@ -374,7 +374,18 @@ function Team() {
           },
         }}
       >
-        <DataGrid rows={displayedRows} columns={columns} pagination={false} />
+        <DataGrid
+          rows={displayedRows}
+          columns={columns}
+          pageSize={rowsPerPage}
+          pageSizeOptions={[rowsPerPage]}
+          rowsPerPageOptions={[rowsPerPage]}
+          paginationModel={{
+            page: currentPage - 1,
+            pageSize: rowsPerPage,
+          }}
+          onPageChange={(params) => handlePageChange(null, params.page + 1)}
+        />
       </Box>
       <Box
         mt="20px"

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -20,14 +20,13 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     <MenuItem
       active={selected === title}
       style={{
+        width: '210px',
         color: colors.grey[100],
+        backgroundColor: selected === title ? colors.primary[700] : "transparent",
+        borderRadius: selected === title ? '5px' : '0',
       }}
       onClick={() => setSelected(title)}
       icon={icon}
-      Managing
-      the
-      Team
-      Members
     >
       <Typography>{title}</Typography>
       <Link to={to} />
@@ -40,6 +39,35 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const location = useLocation();
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/admin/dashboard":
+        setSelected("Dashboard");
+        break;
+      case "/admin/team":
+        setSelected("Manage User");
+        break;
+      case "/admin/addService":
+        setSelected("Services Data");
+        break;
+      case "/admin/calendar":
+        setSelected("Calendar");
+        break;
+      case "/admin/bar":
+        setSelected("Bar Chart");
+        break;
+      case "/admin/pie":
+        setSelected("Pie Chart");
+        break;
+      case "/admin/line":
+        setSelected("Line Chart");
+        break;
+      default:
+        setSelected("Dashboard");
+    }
+  }, [location.pathname]);
 
   return (
     <Box

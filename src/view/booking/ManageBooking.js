@@ -49,7 +49,7 @@ const ManageBookings = () => {
   const [bookingsPerPage] = useState(5);
   const navigate = useNavigate();
   const classes = useStyles();
-  const forceUpdate = useForceUpdate()
+  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
     if (!user) {
@@ -65,7 +65,7 @@ const ManageBookings = () => {
         const paid = [];
         const unpaid = [];
         Object.keys(data).forEach((key) => {
-          const booking = { ...data[key], key }; // Add the key to the booking object for updating later
+          const booking = { ...data[key], key };
           if (
             booking.status === "Paid" ||
             booking.status === "Cancelled" ||
@@ -77,8 +77,20 @@ const ManageBookings = () => {
             unpaid.push(booking);
           }
         });
-        // Sort paid bookings with cancelled at bottom
-        paid.sort((a, b) => statusToNumber(a.status) - statusToNumber(b.status));
+
+        const compareBookings = (a, b) => {
+          const statusDifference =
+            statusToNumber(a.status) - statusToNumber(b.status);
+          if (statusDifference !== 0) return statusDifference;
+
+          const dateA = new Date(`${a.date} ${a.time}`);
+          const dateB = new Date(`${b.date} ${b.time}`);
+          return dateB - dateA;
+        };
+
+        paid.sort(compareBookings);
+        unpaid.sort(compareBookings);
+
         setPaidBookings(paid);
         setUnpaidBookings(unpaid);
       } else {
@@ -97,17 +109,17 @@ const ManageBookings = () => {
 
   const handleRating = (booking) => {
     navigate(`/rate-booking/${booking.key}`);
-  }
+  };
 
-  const statusToNumber = status => {
+  const statusToNumber = (status) => {
     switch (status) {
-      case 'Paid':
+      case "Paid":
         return 1;
-      case 'Checked-in':
+      case "Checked-in":
         return 2;
-      case 'Rated':
+      case "Rated":
         return 3;
-      case 'Cancelled':
+      case "Cancelled":
         return 4;
       default:
         return 5;
@@ -118,8 +130,14 @@ const ManageBookings = () => {
     if (confirmCancel) {
       const user = auth.currentUser;
       const db = getDatabase();
-      const bookingRef = ref(db, `users/${user.uid}/bookings/${confirmCancel.key}`);
-      const vetScheduleRef = ref(db, `users/${confirmCancel.vet.uid}/schedule/${confirmCancel.date}`);
+      const bookingRef = ref(
+        db,
+        `users/${user.uid}/bookings/${confirmCancel.key}`
+      );
+      const vetScheduleRef = ref(
+        db,
+        `users/${confirmCancel.vet.uid}/schedule/${confirmCancel.date}`
+      );
       const vetScheduleSnapshot = await get(vetScheduleRef);
       const vetSchedule = vetScheduleSnapshot.val();
 
@@ -139,7 +157,13 @@ const ManageBookings = () => {
         const updatedBalance = userData.accountBalance + refundAmount;
 
         // Optimistically update state before making async calls
-        setPaidBookings((prev) => prev.map((booking) => booking.key === confirmCancel.key ? { ...booking, status: "Cancelled" } : booking));
+        setPaidBookings((prev) =>
+          prev.map((booking) =>
+            booking.key === confirmCancel.key
+              ? { ...booking, status: "Cancelled" }
+              : booking
+          )
+        );
 
         await update(bookingRef, { status: "Cancelled" });
         await update(userRef, { accountBalance: updatedBalance });
@@ -147,24 +171,33 @@ const ManageBookings = () => {
 
         // Sort the updated list so cancelled bookings are at the bottom
         setPaidBookings((prev) => {
-          const updated = prev.map((booking) => 
-            booking.key === confirmCancel.key ? { ...booking, status: "Cancelled" } : booking
+          const updated = prev.map((booking) =>
+            booking.key === confirmCancel.key
+              ? { ...booking, status: "Cancelled" }
+              : booking
           );
-          return updated.sort((a, b) => statusToNumber(a.status) - statusToNumber(b.status));
+          return updated.sort(
+            (a, b) => statusToNumber(a.status) - statusToNumber(b.status)
+          );
         });
 
         // Show success message
-        toast.success("Cancelled successfully! Please check your booking section.", {
-          autoClose: 2000,
-          onClose: () => {
-            forceUpdate();
+        toast.success(
+          "Cancelled successfully! Please check your booking section.",
+          {
+            autoClose: 2000,
+            onClose: () => {
+              forceUpdate();
+            },
           }
-        });
+        );
 
         setConfirmCancel(null);
       } catch (error) {
         console.error("Error cancelling booking:", error);
-        toast.error(`An error occurred while processing the cancellation. Details: ${error.message}`);
+        toast.error(
+          `An error occurred while processing the cancellation. Details: ${error.message}`
+        );
       }
     }
   };
@@ -179,8 +212,14 @@ const ManageBookings = () => {
 
   const indexOfLastBooking = currentPage * bookingsPerPage;
   const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
-  const currentPaidBookings = paidBookings.slice(indexOfFirstBooking, indexOfLastBooking);
-  const currentUnpaidBookings = unpaidBookings.slice(indexOfFirstBooking, indexOfLastBooking);
+  const currentPaidBookings = paidBookings.slice(
+    indexOfFirstBooking,
+    indexOfLastBooking
+  );
+  const currentUnpaidBookings = unpaidBookings.slice(
+    indexOfFirstBooking,
+    indexOfLastBooking
+  );
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
@@ -209,7 +248,7 @@ const ManageBookings = () => {
         return "";
     }
   };
-  
+
   return (
     <div className="manage-bookings-page">
       <h2 className="manage-bookings-title">Manage Bookings</h2>
@@ -252,8 +291,12 @@ const ManageBookings = () => {
                         <td>{booking.bookingId}</td>
                         <td>{booking.date}</td>
                         <td>{booking.time}</td>
-                        <td className={`status-cell ${getStatusClassName(booking.status)}`}>
-                            {booking.status}
+                        <td
+                          className={`status-cell ${getStatusClassName(
+                            booking.status
+                          )}`}
+                        >
+                          {booking.status}
                         </td>
                         <td style={{ textAlign: "center" }}>
                           <button
@@ -282,7 +325,7 @@ const ManageBookings = () => {
                             disabled={
                               booking.status === "Cancelled" ||
                               booking.status === "Rated" ||
-                              booking.status === "Paid" 
+                              booking.status === "Paid"
                             }
                           >
                             Rate
@@ -403,8 +446,12 @@ const ManageBookings = () => {
                         <td>{booking.bookingId}</td>
                         <td>{booking.date}</td>
                         <td>{booking.time}</td>
-                        <td className={`status-cell ${getStatusClassName(booking.status)}`}>
-                            {booking.status || "Pending"}
+                        <td
+                          className={`status-cell ${getStatusClassName(
+                            booking.status
+                          )}`}
+                        >
+                          {booking.status || "Pending"}
                         </td>
                         <td>
                           <button
