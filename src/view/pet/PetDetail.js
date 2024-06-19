@@ -23,7 +23,7 @@ const PetDetail = () => {
     "American Curl",
     "American Shorthair",
     "American Wirehair",
-    "Balinese",
+    "Balinese", 
     "Bengal",
     "Birman",
     "Bombay",

@@ -22,7 +22,7 @@ function Header({ user, currentPath }) {
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
-  };
+  }; 
 
   const logout = () => {
     auth.signOut().then(() => {

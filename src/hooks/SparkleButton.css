@@ -21,7 +21,7 @@ button {
   transition: all .3s ease-in-out;
   cursor: pointer;
 }
-
+ 
 .star-1 {
     color: red;
   position: absolute;

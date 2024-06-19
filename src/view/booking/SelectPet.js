@@ -10,7 +10,7 @@ import { BookingContext } from '../../Components/context/BookingContext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import imageNopet from "../../public/assets/Remove-bg.ai_1716049467772.png"
-
+ 
 const useStyles = makeStyles({
   pagination: {
     display: "flex",

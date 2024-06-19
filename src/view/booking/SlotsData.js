@@ -13,4 +13,4 @@ const generateTimeSlots = (startTime, endTime, interval) => {
   
     return slots;
   };
-  
+   

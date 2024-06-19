@@ -21,7 +21,7 @@ const AddPet = () => {
 
   const backBtn = () => {
     navigate(-1)
-  }
+  } 
   
 
 

@@ -19,7 +19,7 @@ const SelectService = () => {
       navigate('/book/select-pet');
     }
   }, [selectedPet, navigate]);
-
+ 
   useEffect(() => {
     const servicesRef = ref(db, 'services');
     const unsubscribe = onValue(servicesRef, (snapshot) => {

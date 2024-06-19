@@ -12,7 +12,7 @@ function ForgotPassword() {
     const signUp = () => {
       navigate("/signIn")
     }
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const emailVal = e.target.email.value;

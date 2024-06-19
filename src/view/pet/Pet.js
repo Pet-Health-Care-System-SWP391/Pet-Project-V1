@@ -22,7 +22,7 @@ const useStyles = makeStyles({
       fontSize: "1.5rem",
       marginLeft: "2rem",
       padding: "4px",
-      borderRadius: "50%",
+      borderRadius: "50%", 
       backgroundColor: "#7b2cbf",
       border: "1px solid var(--neon-color)",
       color: "#fff",

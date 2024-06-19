@@ -16,7 +16,7 @@ const NotFound = () => {
         <button class="button-404">GO BACK HOME</button>
       </div>
     </main>
-
+ 
     <div class="box-astronaut">
       <img src={Astronaut} alt="" />
     </div>

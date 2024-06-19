@@ -21,7 +21,7 @@ const QrCodePage = () => {
   const [accountBalance, setAccountBalance] = useState(0);
   const [totalPaid, setTotalPaid] = useState(0);
   const forceUpdate = useForceUpdate();
-  
+   
   const userId = auth.currentUser.uid
   console.log(userId)
 

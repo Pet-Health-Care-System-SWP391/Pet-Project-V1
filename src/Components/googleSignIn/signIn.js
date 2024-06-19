@@ -18,7 +18,7 @@ import {
   set,
   onValue,
   get,
-  update,
+  update, 
   child,
 } from "firebase/database";
 import useForceUpdate from "../../hooks/useForceUpdate";

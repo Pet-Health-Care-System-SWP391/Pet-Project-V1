@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import useForceUpdate from "../../hooks/useForceUpdate";
-
+ 
 const AddPetNext = () => {
   const { petData, updatePetData, clearPetData } = useContext(AddPetContext);
   const [loading, setLoading] = useState(false);

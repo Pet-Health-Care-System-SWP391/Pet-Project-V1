@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     marginTop: "0",
     paddingBottom: "2rem",
     "& .MuiPaginationItem-root": {
-      fontSize: "1.5rem",
+      fontSize: "1.5rem", 
       marginLeft: "2rem",
       padding: "4px",
       borderRadius: "50%",

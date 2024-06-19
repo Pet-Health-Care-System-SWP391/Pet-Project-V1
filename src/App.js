@@ -20,7 +20,7 @@ function App() {
               <ToastContainer
                 transition={Slide}
                 autoClose={1500}
-                newestOnTop={true}
+                newestOnTop={true} 
                 pauseOnHover={true}
                 pauseOnFocusLoss={false}
                 limit={5}

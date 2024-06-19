@@ -19,7 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { auth } from "../../../../Components/firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-
+ 
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);

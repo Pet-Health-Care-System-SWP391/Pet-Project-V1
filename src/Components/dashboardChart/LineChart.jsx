@@ -15,7 +15,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           domain: {
             line: {
               stroke: colors.grey[100],
-            },
+            }, 
           },
           legend: {
             text: {

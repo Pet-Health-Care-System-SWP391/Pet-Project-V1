@@ -16,5 +16,5 @@ const ProtectedRoute = ({ children, user, requiredRole }) => {
 
   return children;
 };
-
+ 
 export default ProtectedRoute;

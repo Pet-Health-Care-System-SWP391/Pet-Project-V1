@@ -21,7 +21,7 @@ import NotFound from "../src/view/invalidPage/404Page"
 import FullCalendar from "./Components/vetSchedule/FullCalendar"
 import Vet from "../src/view/vet/VetDashboard"
 import { auth } from "./Components/firebase/firebase";
-import "./App.css";
+import "./App.css"; 
 import Rating from "./view/booking/RateBooking"
 
 function MainContent() {

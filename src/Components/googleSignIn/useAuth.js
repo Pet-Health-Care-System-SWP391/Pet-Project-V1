@@ -18,7 +18,7 @@ const useAuth = () => {
               ...currentUser,
               roles: data.roles || [], // assuming roles is an array in your database
             });
-          }
+          } 
         });
       } else {
         setUser(null);

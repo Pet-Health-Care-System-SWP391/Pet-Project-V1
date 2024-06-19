@@ -115,7 +115,7 @@ function VetDashboard() {
               />
             </Routes>
           </main>
-        </div>
+        </div> 
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

@@ -15,7 +15,7 @@ export const TransactionProvider = ({ children }) => {
           'Authorization': `Apikey ${process.env.REACT_APP_CASSO_API_KEY}`,
         },
       });
-  
+   
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

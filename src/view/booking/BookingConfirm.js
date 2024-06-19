@@ -22,7 +22,7 @@ const BookingConfirm = () => {
   const currentUser = auth.currentUser;
   const userId = currentUser.uid
   console.log(userId)
-
+ 
   useEffect(() => {
     const fetchUserData = async () => {
       try {

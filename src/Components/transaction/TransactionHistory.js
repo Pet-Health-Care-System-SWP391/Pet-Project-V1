@@ -17,7 +17,7 @@ const TransactionHistory = () => {
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        } 
 
         const result = await response.json();
         const descriptions = result.data.records.map(record => record.description);

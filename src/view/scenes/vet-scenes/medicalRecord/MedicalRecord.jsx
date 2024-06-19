@@ -25,7 +25,7 @@ const MedicalRecord = () => {
       const data = snapshot.val();
       console.log("Fetched booking data:", data);
       if (data) {
-        setBooking(data);
+        setBooking(data); 
         if (data.medicalRecord) {
           setDiagnostic(data.medicalRecord.diagnostic || "");
           setSymptoms(data.medicalRecord.symptoms || "");

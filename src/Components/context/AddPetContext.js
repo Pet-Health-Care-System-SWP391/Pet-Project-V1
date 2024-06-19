@@ -13,7 +13,7 @@ export const PetProvider = ({ children }) => {
     imageUrl: "",
     dob: "",
   });
-
+ 
   const updatePetData = (key, value) => {
     setPetData((prevData) => ({ ...prevData, [key]: value }));
   };

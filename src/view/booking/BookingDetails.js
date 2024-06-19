@@ -17,7 +17,7 @@ const BookingDetails = () => {
     if (!user) {
       console.log("No user is currently logged in.");
       return;
-    }
+    } 
 
     const fetchBookingDetails = async () => {
       try {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../Components/firebase/firebase"; 
+import { auth } from "../../Components/firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "firebase/auth"; 
+import { updateProfile } from "firebase/auth";
 import { getDatabase, ref, onValue, update } from "firebase/database";
-import { ToastContainer, toast } from 'react-toastify';
-import useForceUpdate from '../../hooks/useForceUpdate'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faIdBadge } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from "react-toastify";
+import useForceUpdate from "../../hooks/useForceUpdate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons";
 
 function Update() {
   const [email, setEmail] = useState("");
@@ -17,19 +17,18 @@ function Update() {
   const [userId, setUserId] = useState("");
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(true);
-  const [userUpdated, setUserUpdated] = useState(false); 
+  const [userUpdated, setUserUpdated] = useState(false);
   const navigate = useNavigate();
   const user = auth.currentUser;
-  const forceUpdate = useForceUpdate(); // use the custom hook
-
+  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
     if (user) {
       setUserId(user.uid);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
-      setPhone('');
-      setAddress('');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
+      setPhone("");
+      setAddress("");
     }
   }, [user]);
 
@@ -59,15 +58,15 @@ function Update() {
     const updates = {};
     if (email) {
       updates.email = email;
-      localStorage.setItem('email', email);
+      localStorage.setItem("email", email);
     }
     if (username) {
       updates.username = username;
-      localStorage.setItem('username', username);
+      localStorage.setItem("username", username);
     }
     if (accountBalance) {
       updates.accountBalance = accountBalance;
-      localStorage.setItem('accountBalance', accountBalance);
+      localStorage.setItem("accountBalance", accountBalance);
     }
     if (phone) {
       updates.phone = phone;
@@ -87,14 +86,14 @@ function Update() {
             displayName: username,
             phone: phone,
             address: address,
-            fullname: fullname
+            fullname: fullname,
           });
 
           await update(ref(getDatabase(), "users/" + userId), updates);
-          setUserUpdated(true); 
+          setUserUpdated(true);
           toast.success("Cập nhật thành công !!!", {
             onClose: () => {
-              navigate("/account")
+              navigate("/account");
               forceUpdate();
             },
           });
@@ -111,13 +110,13 @@ function Update() {
   useEffect(() => {
     if (userUpdated) {
       setUserUpdated(false);
-      setEmail(localStorage.getItem('email') || '');
-      setUsername(localStorage.getItem('username') || '');
+      setEmail(localStorage.getItem("email") || "");
+      setUsername(localStorage.getItem("username") || "");
     }
   }, [userUpdated]);
 
   return (
-    <div style={{height: "100vh"}} className="update-account-page">
+    <div style={{ height: "100vh" }} className="update-account-page">
       <div className="container container-update" id="container">
         <div className="account">
           <h3 className="account-title">Update Account</h3>
@@ -130,7 +129,7 @@ function Update() {
             <div className="mid-form">
               <div className="form-row">
                 <div className="account-input">
-                  <label style={{marginTop: "10px"}}>Username</label>
+                  <label style={{ marginTop: "10px" }}>Username</label>
                   <input
                     id="username"
                     type="text"
@@ -146,7 +145,7 @@ function Update() {
                   />
                 </div>
                 <div className="account-input">
-                  <label style={{marginTop: "10px"}}>FullName</label>
+                  <label style={{ marginTop: "10px" }}>FullName</label>
                   <input
                     id="fullname"
                     type="fullname"
@@ -162,7 +161,7 @@ function Update() {
               </div>
               <div className="form-row">
                 <div className="account-input">
-                  <label style={{marginTop: "10px"}}>Email</label>
+                  <label style={{ marginTop: "10px" }}>Email</label>
                   <input
                     id="email"
                     type="email"
@@ -177,7 +176,7 @@ function Update() {
                   />
                 </div>
                 <div className="account-input">
-                  <label style={{marginTop: "10px"}}>Phone</label>
+                  <label style={{ marginTop: "10px" }}>Phone</label>
                   <input
                     id="phone"
                     type="phone"
@@ -193,18 +192,26 @@ function Update() {
               </div>
             </div>
             <div className="account-input">
-            <label style={{marginTop: "20px", marginRight: "20px", marginLeft: "15px"}}>Address</label>
-            <input
-              id="address"
-              type="address"
-              autoComplete="off"
-              value={address}
-              placeholder="Enter your address"
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
-              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-            />
+              <label
+                style={{
+                  marginTop: "20px",
+                  marginRight: "20px",
+                  marginLeft: "15px",
+                }}
+              >
+                Address
+              </label>
+              <input
+                id="address"
+                type="address"
+                autoComplete="off"
+                value={address}
+                placeholder="Enter your address"
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+              />
             </div>
             <div className="update-button-container">
               <button
@@ -216,8 +223,8 @@ function Update() {
               </button>
             </div>
           </form>
-      </div>
         </div>
+      </div>
     </div>
   );
 }

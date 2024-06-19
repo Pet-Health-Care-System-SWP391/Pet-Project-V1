@@ -16,7 +16,7 @@ const firebaseConfig = {
   measurementId: "G-B42DEKS32T",
   databaseURL: "https://veterinaryclinic-422805-default-rtdb.firebaseio.com/"
 };
-
+ 
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

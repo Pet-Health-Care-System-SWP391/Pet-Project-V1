@@ -17,7 +17,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
             sx={{ color: colors.grey[100] }}
           >
             {title}
-          </Typography>
+          </Typography> 
         </Box>
         <Box>
           <ProgressCircle progress={progress} />

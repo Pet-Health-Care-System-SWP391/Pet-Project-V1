@@ -20,7 +20,7 @@ const shouldShowFooter =
 
 if (!shouldShowFooter) {
 return null; // Don't render the header if it's a login or admin page
-}
+} 
 return (
 <footer className="footer-footer">
 <div className="footer-text">

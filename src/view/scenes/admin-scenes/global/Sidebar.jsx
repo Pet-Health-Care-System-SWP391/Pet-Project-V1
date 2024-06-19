@@ -19,7 +19,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   return (
     <MenuItem
       active={selected === title}
-      style={{
+      style={{ 
         width: '210px',
         color: colors.grey[100],
         backgroundColor: selected === title ? colors.primary[700] : "transparent",

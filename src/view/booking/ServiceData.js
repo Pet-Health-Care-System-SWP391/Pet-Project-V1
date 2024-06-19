@@ -4,3 +4,4 @@
 //   { name: "Check-up", image: "https://d2zp5xs5cp8zlg.cloudfront.net/image-39535-800.jpg", price: 40, description: "This service involves a comprehensive physical examination of the pet's body, including measurements of temperature, blood pressure, heart rate and weight." },
 //   {name: "Pet Veterinary", price: 100, image: "https://assets.petco.com/petco/image/upload/f_auto,q_auto:best,dpr_2.0/vet-services-hero-img-600x400.png", description: "This service offers complete medical care for animals, including the identification and management of diseases, traumas, and other health issues."}
 // ];
+ 

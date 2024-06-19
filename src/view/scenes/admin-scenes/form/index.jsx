@@ -21,7 +21,7 @@ const Form = () => {
         validationSchema={checkoutSchema}
       >
         {({
-          values,
+          values, 
           errors,
           touched,
           handleBlur,

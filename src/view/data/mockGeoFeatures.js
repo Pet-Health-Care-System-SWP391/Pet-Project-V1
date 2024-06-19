@@ -8,7 +8,7 @@ export const geoFeatures = {
       },
       geometry: {
         type: "Polygon",
-        coordinates: [
+        coordinates: [ 
           [
             [61.210817, 35.650072],
             [62.230651, 35.270664],

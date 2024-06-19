@@ -15,7 +15,7 @@ export let mockLineData = [
     data: Array.from({ length: 12 }, (_, i) => ({
       x: (i + 1).toString(),
       y: 0,
-    })),
+    })), 
   },
 ];
 

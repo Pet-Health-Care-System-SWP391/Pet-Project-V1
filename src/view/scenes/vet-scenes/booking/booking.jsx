@@ -12,7 +12,7 @@ import Header from "../../../../Components/dashboardChart/Header";
 
 const Booking = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
-  const auth = getAuth();
+  const auth = getAuth(); 
   const navigate = useNavigate();
 
   const convertScheduleToEvents = (schedule) => {

@@ -22,7 +22,7 @@ const generateTimeSlots = (startTime, endTime, interval) => {
       .padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
     slots.push({ timeString, formattedTime });
     currentTime += interval;
-  }
+  } 
 
   return slots;
 };

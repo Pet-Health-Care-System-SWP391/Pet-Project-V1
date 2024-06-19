@@ -24,7 +24,7 @@ import { faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import useForceUpdate from "../../hooks/useForceUpdate";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+ 
 const labels = {
   0.5: "Useless",
   1: "Useless+",
